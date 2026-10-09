@@ -15,19 +15,31 @@ O cliente pediu para **construir o site aos poucos, com calma, começando pelas 
 
 > Nesta fase o conteúdo pode ser cadastrado diretamente pela equipe de desenvolvimento (ainda sem área administrativa).
 
-## Fase 2 — Conteúdos, Vitrine e materiais (MVP completo)
+## Fase 2 — Área administrativa, círculo de leitura e conteúdos (MVP completo)
 
-**Objetivo:** o site passa a ser espaço de aprendizado e divulgação.
+**Objetivo:** o site passa a ser ferramenta do círculo de leitura e espaço de aprendizado e divulgação.
 
-- Área administrativa com login, editor, rascunhos e uploads (RF-07.1 a 07.8, 07.11)
+Como é uma fase grande, a proposta é dividi-la em duas entregas:
+
+### Fase 2a — Área administrativa + círculo de leitura
+
+- Área administrativa com login e recuperação de senha (RF-07.1, 07.11)
+- Contas de participantes e cadastro de histórias e capítulos (RF-10.1 a 10.3)
+- Cronograma, metas, painel da participante e registro de leituras (RF-10.4 a 10.8)
+- Cálculo automático das metas e painel das administradoras (RF-10.9 a 10.12)
+- Termo de consentimento e transparência sobre os dados (RNF-25 a 27)
+
+> O círculo de leitura vem antes das seções de conteúdo porque resolve um trabalho manual que já existe hoje (a conferência das metas). A ordem pode ser invertida se o coletivo preferir.
+
+### Fase 2b — Conteúdos, Vitrine e materiais
+
+- Editor, rascunhos e uploads (RF-07.2 a 07.8)
 - Biblioteca de conteúdos (RF-01)
 - Espaço criativo (RF-02)
 - Marketing literário (RF-03)
-- Vitrine de histórias (RF-04)
+- Vitrine de histórias (RF-04), reaproveitando as histórias já cadastradas no círculo
 - Dicas e materiais gratuitos (RF-05)
 - Obras e conteúdos no perfil das autoras (RF-06.2, 06.3)
-
-> Sugestão: se necessário, a Fase 2 pode ser dividida — primeiro a área administrativa + Vitrine, depois as seções de conteúdo.
 
 ## Fase 3 — Melhorias de descoberta e engajamento
 
@@ -39,6 +51,7 @@ O cliente pediu para **construir o site aos poucos, com calma, começando pelas 
 - Perfis de acesso Administradora/Autora (RF-07.9)
 - Agendamento de publicações (RF-07.10)
 - Formulário de contato e feed do Instagram (RF-09.1, 09.2)
+- Círculo de leitura: histórico da participante, relatórios exportáveis e lembretes por e-mail (RF-10.13 a 10.15)
 
 ## Fase 4 — Serviços das integrantes
 
@@ -49,3 +62,4 @@ O cliente pediu para **construir o site aos poucos, com calma, começando pelas 
 
 - Vitrine aberta a escritoras convidadas (RF-04.7)
 - Newsletter (RF-09.3)
+- Verificação automática no Wattpad, só se houver um meio oficial e permitido (RF-10.16)

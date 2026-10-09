@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Requisitos — Constelação Literária</title>
+<style>
+:root {
+  --bg: #f7f6fb; --surface: #ffffff; --surface-2: #f0eef7; --text: #1e1b2e; --muted: #5f5a75;
+  --border: #e1ddef; --accent: #5b3fd1; --accent-soft: #ebe6ff; --highlight: #fff4c2;
+  --m-bg: #fde3e3; --m-fg: #a11d1d; --s-bg: #fff0d1; --s-fg: #8a5300;
+  --c-bg: #dcecff; --c-fg: #1d4f91; --w-bg: #ebebef; --w-fg: #55556a;
+  --shadow: 0 1px 2px rgba(30, 27, 46, .06), 0 4px 16px rgba(30, 27, 46, .05);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14121d; --surface: #1d1a29; --surface-2: #262236; --text: #ebe8f5; --muted: #a49fbc;
+    --border: #332e47; --accent: #a996ff; --accent-soft: #2d2650; --highlight: #4a3f12;
+    --m-bg: #4a1f24; --m-fg: #ffb4b4; --s-bg: #45341a; --s-fg: #ffd59a;
+    --c-bg: #1c3150; --c-fg: #a9cdff; --w-bg: #2c2b36; --w-fg: #b9b8c8;
+    --shadow: none;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14121d; --surface: #1d1a29; --surface-2: #262236; --text: #ebe8f5; --muted: #a49fbc;
+  --border: #332e47; --accent: #a996ff; --accent-soft: #2d2650; --highlight: #4a3f12;
+  --m-bg: #4a1f24; --m-fg: #ffb4b4; --s-bg: #45341a; --s-fg: #ffd59a;
+  --c-bg: #1c3150; --c-fg: #a9cdff; --w-bg: #2c2b36; --w-fg: #b9b8c8;
+  --shadow: none;
+}
+* { box-sizing: border-box; }
+html { scroll-padding-top: 130px; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 15px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+a { color: var(--accent); }
+a.ref { text-decoration: none; font-weight: 600; white-space: nowrap; }
+a.ref:hover { text-decoration: underline; }
+code { background: var(--surface-2); padding: 1px 5px; border-radius: 4px; font-size: .9em; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+
+header.topo { background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 10; }
+.topo .linha1 { display: flex; align-items: center; gap: 12px; padding: 12px 0 8px; flex-wrap: wrap; }
+.topo h1 { font-size: 18px; margin: 0; flex: 1; min-width: 200px; }
+.topo h1 span { color: var(--muted); font-weight: 400; font-size: 13px; margin-left: 6px; }
+.tema { background: var(--surface-2); border: 1px solid var(--border); color: var(--text);
+  border-radius: 8px; padding: 6px 10px; cursor: pointer; font: inherit; font-size: 13px; }
+nav.abas { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+nav.abas button {
+  background: none; border: 0; border-bottom: 2px solid transparent; color: var(--muted);
+  padding: 8px 12px; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap;
+}
+nav.abas button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+nav.abas button small { font-weight: 400; opacity: .8; }
+
+main { padding: 20px 0 60px; }
+.painel { display: none; }
+.painel.ativo { display: block; }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow); }
+.card b { display: block; font-size: 26px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.card span { color: var(--muted); font-size: 13px; }
+
+.filtros { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px;
+  display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; box-shadow: var(--shadow); }
+.filtros .grupo { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.filtros .rotulo { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); width: 82px; }
+.chip { background: var(--surface-2); border: 1px solid var(--border); color: var(--text); border-radius: 999px;
+  padding: 4px 10px; font: inherit; font-size: 13px; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
+.chip small { color: var(--muted); }
+.chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+input[type="search"], select {
+  background: var(--surface-2); border: 1px solid var(--border); color: var(--text); border-radius: 8px;
+  padding: 7px 10px; font: inherit; font-size: 14px; flex: 1; min-width: 160px;
+}
+.limpar { background: none; border: 0; color: var(--accent); cursor: pointer; font: inherit; font-size: 13px; }
+.resultado { color: var(--muted); font-size: 13px; }
+
+.modulo { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: var(--shadow); }
+.modulo h3 { margin: 0 0 6px; font-size: 17px; }
+.modulo h3 .conta { color: var(--muted); font-weight: 400; font-size: 13px; }
+.modulo .desc { color: var(--muted); margin: 0 0 10px; }
+.modulo.vazio { display: none; }
+.id { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 13px; color: var(--muted); white-space: nowrap; }
+h3 .id { color: var(--accent); font-size: 15px; }
+
+.tabela { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); font-weight: 600; }
+tbody tr:last-child td { border-bottom: 0; }
+table.reqs td:nth-child(3), table.reqs td:nth-child(4) { white-space: nowrap; }
+tr.oculto { display: none; }
+tr.destaque td { background: var(--highlight); transition: background .3s; }
+
+.prio { display: inline-block; min-width: 22px; text-align: center; border-radius: 6px; padding: 1px 6px; font-weight: 700; font-size: 12px; }
+.p-M { background: var(--m-bg); color: var(--m-fg); }
+.p-S { background: var(--s-bg); color: var(--s-fg); }
+.p-C { background: var(--c-bg); color: var(--c-fg); }
+.p-W { background: var(--w-bg); color: var(--w-fg); }
+.fase { font-size: 13px; color: var(--muted); }
+.so-celular { display: none; }
+
+.nota, blockquote { background: var(--accent-soft); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0;
+  padding: 8px 14px; margin: 12px 0 0; }
+.nota p, blockquote p { margin: 4px 0; }
+
+.doc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 4px 24px 20px; box-shadow: var(--shadow); }
+.doc h2 { font-size: 20px; margin: 28px 0 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+.doc h2:first-child { border-top: 0; }
+.doc h3 { font-size: 16px; margin: 20px 0 8px; }
+.doc hr { border: 0; border-top: 1px solid var(--border); margin: 20px 0; }
+.doc li { margin: 4px 0; }
+.legenda { margin-bottom: 16px; color: var(--muted); font-size: 14px; }
+.legenda p, .legenda ul { margin: 4px 0; }
+.legenda ul { display: flex; flex-wrap: wrap; gap: 4px 18px; padding-left: 18px; }
+footer { color: var(--muted); font-size: 12px; text-align: center; padding: 20px 0 40px; }
+
+@media (max-width: 640px) {
+  html { scroll-padding-top: 150px; }
+  .doc { padding: 4px 14px 16px; }
+  .filtros .rotulo { width: 100%; }
+  table.reqs thead { display: none; }
+  table.reqs tr { display: grid; grid-template-columns: auto 1fr auto; gap: 2px 8px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  table.reqs td { border: 0; padding: 0; }
+  table.reqs td:nth-child(2) { grid-column: 1 / -1; grid-row: 2; }
+  table.reqs td:nth-child(4) { grid-row: 1; grid-column: 2; }
+  table.reqs td:nth-child(3) { grid-row: 1; grid-column: 3; }
+  .so-celular { display: inline; }
+}
+@media print {
+  header.topo { position: static; }
+  nav.abas, .filtros, .tema { display: none; }
+  .painel { display: block !important; break-before: page; }
+}
+</style>
+</head>
+<body>
+<header class="topo">
+  <div class="wrap">
+    <div class="linha1">
+      <h1>✨ Requisitos — Constelação Literária <span>gerado em 09/10/2026</span></h1>
+      <button class="tema" id="tema" type="button">◐ Tema</button>
+    </div>
+    <nav class="abas" role="tablist">
+      <button role="tab" data-aba="rf">Funcionais <small>69</small></button>
+      <button role="tab" data-aba="rnf">Não funcionais <small>27</small></button>
+      <button role="tab" data-aba="roadmap">Roadmap</button>
+      <button role="tab" data-aba="visao">Visão geral</button>
+      <button role="tab" data-aba="questoes">Questões em aberto <small>26</small></button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="painel" id="aba-rf">
+    <div class="cards">
+      <div class="card"><b>69</b><span>requisitos funcionais</span></div>
+      <div class="card"><b>34</b><span>obrigatórios (Must)</span></div>
+      <div class="card"><b>27</b><span>não funcionais</span></div>
+      <div class="card"><b>26</b><span>questões em aberto</span></div>
+    </div>
+    <div class="legenda"><p><strong>Prioridade (MoSCoW):</strong></p>
+<ul><li><strong>M</strong> — <em>Must</em> (obrigatório para a fase em que está previsto)</li><li><strong>S</strong> — <em>Should</em> (importante, mas pode esperar um pouco)</li><li><strong>C</strong> — <em>Could</em> (desejável)</li><li><strong>W</strong> — <em>Won't (por agora)</em> — registrado para o futuro</li></ul>
+<p>A coluna <strong>Fase</strong> refere-se ao <a href="#roadmap" data-aba="roadmap">roadmap</a>.</p></div>
+    <div class="filtros">
+      <div class="grupo"><span class="rotulo">Fase</span><button class="chip" data-filtro="fase" data-valor="1">Fase 1 <small>6</small></button><button class="chip" data-filtro="fase" data-valor="2">Fase 2 <small>41</small></button><button class="chip" data-filtro="fase" data-valor="3">Fase 3 <small>15</small></button><button class="chip" data-filtro="fase" data-valor="4">Fase 4 <small>4</small></button><button class="chip" data-filtro="fase" data-valor="—">Sem fase <small>3</small></button></div>
+      <div class="grupo"><span class="rotulo">Prioridade</span><button class="chip" data-filtro="prio" data-valor="M"><span class="prio p-M">M</span> Must <small>34</small></button><button class="chip" data-filtro="prio" data-valor="S"><span class="prio p-S">S</span> Should <small>19</small></button><button class="chip" data-filtro="prio" data-valor="C"><span class="prio p-C">C</span> Could <small>9</small></button><button class="chip" data-filtro="prio" data-valor="W"><span class="prio p-W">W</span> Won't <small>7</small></button></div>
+      <div class="grupo">
+        <span class="rotulo">Buscar</span>
+        <input type="search" id="busca-rf" placeholder="Palavra ou ID (ex.: login, RF-10)">
+        <select id="modulo-rf"><option value="">Todos os módulos</option><option value="RF-00">RF-00 — Estrutura geral e navegação</option><option value="RF-01">RF-01 — Biblioteca de conteúdos</option><option value="RF-02">RF-02 — Espaço criativo</option><option value="RF-03">RF-03 — Marketing literário</option><option value="RF-04">RF-04 — Vitrine de histórias</option><option value="RF-05">RF-05 — Dicas e materiais gratuitos</option><option value="RF-06">RF-06 — Conheça as autoras</option><option value="RF-07">RF-07 — Área administrativa (gestão de conteúdo)</option><option value="RF-08">RF-08 — Serviços das integrantes (ideia futura)</option><option value="RF-09">RF-09 — Contato e engajamento</option><option value="RF-10">RF-10 — Círculo de leitura (nome provisório)</option></select>
+      </div>
+      <div class="grupo"><span class="resultado" id="resultado-rf"></span><button class="limpar" id="limpar-rf" type="button">Limpar filtros</button></div>
+    </div>
+    
+<section class="modulo" id="RF-00" data-modulo="RF-00">
+  <h3><span class="id">RF-00</span> Estrutura geral e navegação <span class="conta"></span></h3>
+  
+  <div class="tabela"><table class="reqs">
+    <thead><tr><th>ID</th><th>Requisito</th><th title="Prioridade">Prior.</th><th>Fase</th></tr></thead>
+    <tbody><tr id="RF-00.1" data-prio="M" data-fase="1" data-busca="rf-00.1 o site deve ter um menu de navegação com acesso a todas as seções publicadas."><td class="id">RF-00.1</td><td>O site deve ter um menu de navegação com acesso a todas as seções publicadas.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>1</span></td></tr><tr id="RF-00.2" data-prio="M" data-fase="1" data-busca="rf-00.2 o site deve ter uma página inicial que apresente o coletivo e destaque as seções e os conteúdos mais recentes."><td class="id">RF-00.2</td><td>O site deve ter uma página inicial que apresente o coletivo e destaque as seções e os conteúdos mais recentes.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>1</span></td></tr><tr id="RF-00.3" data-prio="M" data-fase="1" data-busca="rf-00.3 todas as páginas devem exibir links para as redes sociais do coletivo (instagram, tiktok, wattpad)."><td class="id">RF-00.3</td><td>Todas as páginas devem exibir links para as redes sociais do coletivo (Instagram, TikTok, Wattpad).</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>1</span></td></tr><tr id="RF-00.4" data-prio="M" data-fase="1" data-busca="rf-00.4 o rodapé deve conter informações de contato do coletivo."><td class="id">RF-00.4</td><td>O rodapé deve conter informações de contato do coletivo.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>1</span></td></tr><tr id="RF-00.5" data-prio="S" data-fase="3" data-busca="rf-00.5 o visitante deve poder buscar conteúdos por palavra-chave em todo o site."><td class="id">RF-00.5</td><td>O visitante deve poder buscar conteúdos por palavra-chave em todo o site.</td><td><span class="prio p-S" title="Should">S</span></td><td><span class="fase"><span class="so-celular">Fase </span>3</span></td></tr><tr id="RF-00.6" data-prio="C" data-fase="3" data-busca="rf-00.6 cada conteúdo/obra deve ter um botão para compartilhar o link nas redes sociais."><td class="id">RF-00.6</td><td>Cada conteúdo/obra deve ter um botão para compartilhar o link nas redes sociais.</td><td><span class="prio p-C" title="Could">C</span></td><td><span class="fase"><span class="so-celular">Fase </span>3</span></td></tr></tbody>
+  </table></div>
+  
+</section>
+
+<section class="modulo" id="RF-01" data-modulo="RF-01">
+  <h3><span class="id">RF-01</span> Biblioteca de conteúdos <span class="conta"></span></h3>
+  <p class="desc">Dicas de português, gramática, pontuação, escrita criativa, construção de personagens, enredos e desenvolvimento de capítulos.</p>
+  <div class="tabela"><table class="reqs">
+    <thead><tr><th>ID</th><th>Requisito</th><th title="Prioridade">Prior.</th><th>Fase</th></tr></thead>
+    <tbody><tr id="RF-01.1" data-prio="M" data-fase="2" data-busca="rf-01.1 exibir a lista de conteúdos da biblioteca, do mais recente para o mais antigo."><td class="id">RF-01.1</td><td>Exibir a lista de conteúdos da Biblioteca, do mais recente para o mais antigo.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-01.2" data-prio="M" data-fase="2" data-busca="rf-01.2 organizar os conteúdos por categorias. categorias iniciais: *português e gramática*, *pontuação*, *escrita criativa*, *personagens*, *enredo*, *capítulos*."><td class="id">RF-01.2</td><td>Organizar os conteúdos por categorias. Categorias iniciais: <em>Português e gramática</em>, <em>Pontuação</em>, <em>Escrita criativa</em>, <em>Personagens</em>, <em>Enredo</em>, <em>Capítulos</em>.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-01.3" data-prio="M" data-fase="2" data-busca="rf-01.3 permitir filtrar a lista por categoria."><td class="id">RF-01.3</td><td>Permitir filtrar a lista por categoria.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-01.4" data-prio="M" data-fase="2" data-busca="rf-01.4 cada conteúdo deve ter página própria com título, autora, data, categoria, texto formatado e, opcionalmente, imagens."><td class="id">RF-01.4</td><td>Cada conteúdo deve ter página própria com título, autora, data, categoria, texto formatado e, opcionalmente, imagens.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-01.5" data-prio="S" data-fase="2" data-busca="rf-01.5 permitir incorporar ou linkar o post/vídeo original das redes sociais dentro do conteúdo."><td class="id">RF-01.5</td><td>Permitir incorporar ou linkar o post/vídeo original das redes sociais dentro do conteúdo.</td><td><span class="prio p-S" title="Should">S</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-01.6" data-prio="C" data-fase="3" data-busca="rf-01.6 exibir “conteúdos relacionados” (mesma categoria) ao final de cada conteúdo."><td class="id">RF-01.6</td><td>Exibir “conteúdos relacionados” (mesma categoria) ao final de cada conteúdo.</td><td><span class="prio p-C" title="Could">C</span></td><td><span class="fase"><span class="so-celular">Fase </span>3</span></td></tr><tr id="RF-01.7" data-prio="C" data-fase="3" data-busca="rf-01.7 permitir marcar conteúdos com tags livres (além da categoria)."><td class="id">RF-01.7</td><td>Permitir marcar conteúdos com tags livres (além da categoria).</td><td><span class="prio p-C" title="Could">C</span></td><td><span class="fase"><span class="so-celular">Fase </span>3</span></td></tr></tbody>
+  </table></div>
+  
+</section>
+
+<section class="modulo" id="RF-02" data-modulo="RF-02">
+  <h3><span class="id">RF-02</span> Espaço criativo <span class="conta"></span></h3>
+  <p class="desc">Dicas de criação de capas, identidade visual, banners e outros recursos de apresentação das obras.</p>
+  <div class="tabela"><table class="reqs">
+    <thead><tr><th>ID</th><th>Requisito</th><th title="Prioridade">Prior.</th><th>Fase</th></tr></thead>
+    <tbody><tr id="RF-02.1" data-prio="M" data-fase="2" data-busca="rf-02.1 exibir lista de conteúdos do espaço criativo, com o mesmo modelo de conteúdo da biblioteca (rf-01.4)."><td class="id">RF-02.1</td><td>Exibir lista de conteúdos do Espaço criativo, com o mesmo modelo de conteúdo da Biblioteca (<a class="ref" href="#RF-01.4" data-ref="RF-01.4">RF-01.4</a>).</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-02.2" data-prio="M" data-fase="2" data-busca="rf-02.2 categorias iniciais: *capas*, *identidade visual*, *banners*, *outros recursos*."><td class="id">RF-02.2</td><td>Categorias iniciais: <em>Capas</em>, <em>Identidade visual</em>, <em>Banners</em>, <em>Outros recursos</em>.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-02.3" data-prio="S" data-fase="2" data-busca="rf-02.3 permitir galeria de imagens dentro do conteúdo (ex.: exemplos de capas, antes/depois)."><td class="id">RF-02.3</td><td>Permitir galeria de imagens dentro do conteúdo (ex.: exemplos de capas, antes/depois).</td><td><span class="prio p-S" title="Should">S</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-02.4" data-prio="C" data-fase="3" data-busca="rf-02.4 permitir listar links para ferramentas externas recomendadas (ex.: editores de imagem, bancos de fontes)."><td class="id">RF-02.4</td><td>Permitir listar links para ferramentas externas recomendadas (ex.: editores de imagem, bancos de fontes).</td><td><span class="prio p-C" title="Could">C</span></td><td><span class="fase"><span class="so-celular">Fase </span>3</span></td></tr></tbody>
+  </table></div>
+  
+</section>
+
+<section class="modulo" id="RF-03" data-modulo="RF-03">
+  <h3><span class="id">RF-03</span> Marketing literário <span class="conta"></span></h3>
+  <p class="desc">Divulgação no Instagram, TikTok e Wattpad, estratégias para atrair leitores e ideias de publicações para quem ainda não tem livros publicados.</p>
+  <div class="tabela"><table class="reqs">
+    <thead><tr><th>ID</th><th>Requisito</th><th title="Prioridade">Prior.</th><th>Fase</th></tr></thead>
+    <tbody><tr id="RF-03.1" data-prio="M" data-fase="2" data-busca="rf-03.1 exibir lista de conteúdos de marketing literário, com o mesmo modelo de conteúdo da biblioteca (rf-01.4)."><td class="id">RF-03.1</td><td>Exibir lista de conteúdos de Marketing literário, com o mesmo modelo de conteúdo da Biblioteca (<a class="ref" href="#RF-01.4" data-ref="RF-01.4">RF-01.4</a>).</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-03.2" data-prio="M" data-fase="2" data-busca="rf-03.2 categorias iniciais: *instagram*, *tiktok*, *wattpad*, *estratégias para atrair leitores*, *ideias de posts para quem ainda não publicou*."><td class="id">RF-03.2</td><td>Categorias iniciais: <em>Instagram</em>, <em>TikTok</em>, <em>Wattpad</em>, <em>Estratégias para atrair leitores</em>, <em>Ideias de posts para quem ainda não publicou</em>.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-03.3" data-prio="S" data-fase="2" data-busca="rf-03.3 permitir filtrar por plataforma (instagram, tiktok, wattpad)."><td class="id">RF-03.3</td><td>Permitir filtrar por plataforma (Instagram, TikTok, Wattpad).</td><td><span class="prio p-S" title="Should">S</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr></tbody>
+  </table></div>
+  <div class="nota"><p><strong>Nota de engenharia:</strong> <a class="ref" href="#RF-01" data-ref="RF-01">RF-01</a>, <a class="ref" href="#RF-02" data-ref="RF-02">RF-02</a> e <a class="ref" href="#RF-03" data-ref="RF-03">RF-03</a> compartilham a mesma estrutura (“seção de conteúdos com categorias”). A solução deve tratá-las de forma genérica, para que novas seções possam ser criadas sem novo desenvolvimento.</p></div>
+</section>
+
+<section class="modulo" id="RF-04" data-modulo="RF-04">
+  <h3><span class="id">RF-04</span> Vitrine de histórias <span class="conta"></span></h3>
+  <p class="desc">Divulgar as obras das integrantes, com sinopses e links do Wattpad.</p>
+  <div class="tabela"><table class="reqs">
+    <thead><tr><th>ID</th><th>Requisito</th><th title="Prioridade">Prior.</th><th>Fase</th></tr></thead>
+    <tbody><tr id="RF-04.1" data-prio="M" data-fase="2" data-busca="rf-04.1 exibir as obras em formato de vitrine (cards com capa, título e autora)."><td class="id">RF-04.1</td><td>Exibir as obras em formato de vitrine (cards com capa, título e autora).</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-04.2" data-prio="M" data-fase="2" data-busca="rf-04.2 cada obra deve ter página própria com: capa, título, autora, sinopse, gênero(s), classificação indicativa, status (em andamento / concluída) e link(s) externo(s) (wattpad, amazon etc.)."><td class="id">RF-04.2</td><td>Cada obra deve ter página própria com: capa, título, autora, sinopse, gênero(s), classificação indicativa, status (em andamento / concluída) e link(s) externo(s) (Wattpad, Amazon etc.).</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-04.3" data-prio="S" data-fase="2" data-busca="rf-04.3 permitir filtrar obras por gênero e por autora."><td class="id">RF-04.3</td><td>Permitir filtrar obras por gênero e por autora.</td><td><span class="prio p-S" title="Should">S</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-04.4" data-prio="M" data-fase="2" data-busca="rf-04.4 a página da obra deve linkar para o perfil da autora em “conheça as autoras”."><td class="id">RF-04.4</td><td>A página da obra deve linkar para o perfil da autora em “Conheça as autoras”.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-04.5" data-prio="S" data-fase="3" data-busca="rf-04.5 permitir destacar obras na página inicial (“obra em destaque” / “lançamento”)."><td class="id">RF-04.5</td><td>Permitir destacar obras na página inicial (“obra em destaque” / “lançamento”).</td><td><span class="prio p-S" title="Should">S</span></td><td><span class="fase"><span class="so-celular">Fase </span>3</span></td></tr><tr id="RF-04.6" data-prio="S" data-fase="2" data-busca="rf-04.6 exibir alertas de conteúdo (gatilhos) quando informados pela autora."><td class="id">RF-04.6</td><td>Exibir alertas de conteúdo (gatilhos) quando informados pela autora.</td><td><span class="prio p-S" title="Should">S</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-04.7" data-prio="W" data-fase="—" data-busca="rf-04.7 permitir exibir obras de escritoras **convidadas** (não integrantes)."><td class="id">RF-04.7</td><td>Permitir exibir obras de escritoras <strong>convidadas</strong> (não integrantes).</td><td><span class="prio p-W" title="Won't">W</span></td><td><span class="fase"><span class="so-celular">Fase </span>—</span></td></tr></tbody>
+  </table></div>
+  
+</section>
+
+<section class="modulo" id="RF-05" data-modulo="RF-05">
+  <h3><span class="id">RF-05</span> Dicas e materiais gratuitos <span class="conta"></span></h3>
+  <p class="desc">Guias, modelos, listas de verificação e outros materiais.</p>
+  <div class="tabela"><table class="reqs">
+    <thead><tr><th>ID</th><th>Requisito</th><th title="Prioridade">Prior.</th><th>Fase</th></tr></thead>
+    <tbody><tr id="RF-05.1" data-prio="M" data-fase="2" data-busca="rf-05.1 exibir lista de materiais com título, descrição curta, tipo (*guia*, *modelo*, *checklist*, *outro*) e imagem de prévia."><td class="id">RF-05.1</td><td>Exibir lista de materiais com título, descrição curta, tipo (<em>Guia</em>, <em>Modelo</em>, <em>Checklist</em>, <em>Outro</em>) e imagem de prévia.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-05.2" data-prio="M" data-fase="2" data-busca="rf-05.2 permitir baixar o material (pdf ou outro formato) sem necessidade de cadastro."><td class="id">RF-05.2</td><td>Permitir baixar o material (PDF ou outro formato) sem necessidade de cadastro.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-05.3" data-prio="S" data-fase="2" data-busca="rf-05.3 permitir que o material seja um link externo (ex.: modelo no google docs/canva) em vez de arquivo."><td class="id">RF-05.3</td><td>Permitir que o material seja um link externo (ex.: modelo no Google Docs/Canva) em vez de arquivo.</td><td><span class="prio p-S" title="Should">S</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-05.4" data-prio="S" data-fase="3" data-busca="rf-05.4 filtrar materiais por tipo e por tema."><td class="id">RF-05.4</td><td>Filtrar materiais por tipo e por tema.</td><td><span class="prio p-S" title="Should">S</span></td><td><span class="fase"><span class="so-celular">Fase </span>3</span></td></tr><tr id="RF-05.5" data-prio="C" data-fase="3" data-busca="rf-05.5 contabilizar o número de downloads de cada material (visível apenas para administradoras)."><td class="id">RF-05.5</td><td>Contabilizar o número de downloads de cada material (visível apenas para administradoras).</td><td><span class="prio p-C" title="Could">C</span></td><td><span class="fase"><span class="so-celular">Fase </span>3</span></td></tr></tbody>
+  </table></div>
+  
+</section>
+
+<section class="modulo" id="RF-06" data-modulo="RF-06">
+  <h3><span class="id">RF-06</span> Conheça as autoras <span class="conta"></span></h3>
+  
+  <div class="tabela"><table class="reqs">
+    <thead><tr><th>ID</th><th>Requisito</th><th title="Prioridade">Prior.</th><th>Fase</th></tr></thead>
+    <tbody><tr id="RF-06.1" data-prio="M" data-fase="1" data-busca="rf-06.1 exibir página com todas as integrantes (foto, nome/pseudônimo, especialidades)."><td class="id">RF-06.1</td><td>Exibir página com todas as integrantes (foto, nome/pseudônimo, especialidades).</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>1</span></td></tr><tr id="RF-06.2" data-prio="M" data-fase="1" data-busca="rf-06.2 cada integrante deve ter perfil com: foto, nome/pseudônimo, minibiografia, especialidades, redes sociais e lista de obras (vindas da vitrine)."><td class="id">RF-06.2</td><td>Cada integrante deve ter perfil com: foto, nome/pseudônimo, minibiografia, especialidades, redes sociais e lista de obras (vindas da Vitrine).</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>1 (obras na 2)</span></td></tr><tr id="RF-06.3" data-prio="S" data-fase="2" data-busca="rf-06.3 o perfil deve listar os conteúdos escritos pela integrante."><td class="id">RF-06.3</td><td>O perfil deve listar os conteúdos escritos pela integrante.</td><td><span class="prio p-S" title="Should">S</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-06.4" data-prio="W" data-fase="4" data-busca="rf-06.4 o perfil deve exibir os serviços oferecidos pela integrante (ver rf-08)."><td class="id">RF-06.4</td><td>O perfil deve exibir os serviços oferecidos pela integrante (ver <a class="ref" href="#RF-08" data-ref="RF-08">RF-08</a>).</td><td><span class="prio p-W" title="Won't">W</span></td><td><span class="fase"><span class="so-celular">Fase </span>4</span></td></tr></tbody>
+  </table></div>
+  
+</section>
+
+<section class="modulo" id="RF-07" data-modulo="RF-07">
+  <h3><span class="id">RF-07</span> Área administrativa (gestão de conteúdo) <span class="conta"></span></h3>
+  
+  <div class="tabela"><table class="reqs">
+    <thead><tr><th>ID</th><th>Requisito</th><th title="Prioridade">Prior.</th><th>Fase</th></tr></thead>
+    <tbody><tr id="RF-07.1" data-prio="M" data-fase="2" data-busca="rf-07.1 integrantes devem acessar uma área restrita com login e senha."><td class="id">RF-07.1</td><td>Integrantes devem acessar uma área restrita com login e senha.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-07.2" data-prio="M" data-fase="2" data-busca="rf-07.2 administradoras devem poder criar, editar, despublicar e excluir conteúdos de qualquer seção."><td class="id">RF-07.2</td><td>Administradoras devem poder criar, editar, despublicar e excluir conteúdos de qualquer seção.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-07.3" data-prio="M" data-fase="2" data-busca="rf-07.3 o editor de conteúdo deve permitir texto formatado (títulos, negrito, itálico, listas, links, citações) e upload de imagens, sem exigir conhecimento técnico."><td class="id">RF-07.3</td><td>O editor de conteúdo deve permitir texto formatado (títulos, negrito, itálico, listas, links, citações) e upload de imagens, sem exigir conhecimento técnico.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-07.4" data-prio="M" data-fase="2" data-busca="rf-07.4 permitir salvar conteúdo como **rascunho** antes de publicar."><td class="id">RF-07.4</td><td>Permitir salvar conteúdo como <strong>rascunho</strong> antes de publicar.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-07.5" data-prio="M" data-fase="2" data-busca="rf-07.5 administradoras devem poder cadastrar e editar obras da vitrine."><td class="id">RF-07.5</td><td>Administradoras devem poder cadastrar e editar obras da Vitrine.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-07.6" data-prio="M" data-fase="2" data-busca="rf-07.6 administradoras devem poder cadastrar e editar materiais gratuitos (incluindo upload de arquivo)."><td class="id">RF-07.6</td><td>Administradoras devem poder cadastrar e editar materiais gratuitos (incluindo upload de arquivo).</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-07.7" data-prio="S" data-fase="2" data-busca="rf-07.7 administradoras devem poder gerenciar categorias de cada seção."><td class="id">RF-07.7</td><td>Administradoras devem poder gerenciar categorias de cada seção.</td><td><span class="prio p-S" title="Should">S</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-07.8" data-prio="S" data-fase="2" data-busca="rf-07.8 cada integrante deve poder editar o próprio perfil."><td class="id">RF-07.8</td><td>Cada integrante deve poder editar o próprio perfil.</td><td><span class="prio p-S" title="Should">S</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-07.9" data-prio="S" data-fase="3" data-busca="rf-07.9 perfis de acesso: **administradora** (tudo) e **autora** (apenas o próprio perfil, suas obras e seus conteúdos). o perfil **participante** do círculo de leitura está descrito em rf-10.1."><td class="id">RF-07.9</td><td>Perfis de acesso: <strong>Administradora</strong> (tudo) e <strong>Autora</strong> (apenas o próprio perfil, suas obras e seus conteúdos). O perfil <strong>Participante</strong> do círculo de leitura está descrito em <a class="ref" href="#RF-10.1" data-ref="RF-10.1">RF-10.1</a>.</td><td><span class="prio p-S" title="Should">S</span></td><td><span class="fase"><span class="so-celular">Fase </span>3</span></td></tr><tr id="RF-07.10" data-prio="C" data-fase="3" data-busca="rf-07.10 permitir agendar a publicação de um conteúdo para data/hora futura."><td class="id">RF-07.10</td><td>Permitir agendar a publicação de um conteúdo para data/hora futura.</td><td><span class="prio p-C" title="Could">C</span></td><td><span class="fase"><span class="so-celular">Fase </span>3</span></td></tr><tr id="RF-07.11" data-prio="S" data-fase="2" data-busca="rf-07.11 permitir recuperação de senha por e-mail."><td class="id">RF-07.11</td><td>Permitir recuperação de senha por e-mail.</td><td><span class="prio p-S" title="Should">S</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr></tbody>
+  </table></div>
+  
+</section>
+
+<section class="modulo" id="RF-08" data-modulo="RF-08">
+  <h3><span class="id">RF-08</span> Serviços das integrantes <em>(ideia futura)</em> <span class="conta"></span></h3>
+  <p class="desc">Criação de capas, revisão textual, identidade visual e outros serviços.</p>
+  <div class="tabela"><table class="reqs">
+    <thead><tr><th>ID</th><th>Requisito</th><th title="Prioridade">Prior.</th><th>Fase</th></tr></thead>
+    <tbody><tr id="RF-08.1" data-prio="W" data-fase="4" data-busca="rf-08.1 exibir catálogo de serviços, cada um com: tipo, descrição, integrante responsável, exemplos de trabalho (portfólio) e forma de contato."><td class="id">RF-08.1</td><td>Exibir catálogo de serviços, cada um com: tipo, descrição, integrante responsável, exemplos de trabalho (portfólio) e forma de contato.</td><td><span class="prio p-W" title="Won't">W</span></td><td><span class="fase"><span class="so-celular">Fase </span>4</span></td></tr><tr id="RF-08.2" data-prio="W" data-fase="4" data-busca="rf-08.2 filtrar serviços por tipo (capa, revisão, identidade visual etc.)."><td class="id">RF-08.2</td><td>Filtrar serviços por tipo (capa, revisão, identidade visual etc.).</td><td><span class="prio p-W" title="Won't">W</span></td><td><span class="fase"><span class="so-celular">Fase </span>4</span></td></tr><tr id="RF-08.3" data-prio="W" data-fase="4" data-busca="rf-08.3 o contato com a integrante deve ser feito por link externo (instagram, whatsapp, e-mail) ou formulário — **sem pagamento pelo site**."><td class="id">RF-08.3</td><td>O contato com a integrante deve ser feito por link externo (Instagram, WhatsApp, e-mail) ou formulário — <strong>sem pagamento pelo site</strong>.</td><td><span class="prio p-W" title="Won't">W</span></td><td><span class="fase"><span class="so-celular">Fase </span>4</span></td></tr></tbody>
+  </table></div>
+  
+</section>
+
+<section class="modulo" id="RF-09" data-modulo="RF-09">
+  <h3><span class="id">RF-09</span> Contato e engajamento <span class="conta"></span></h3>
+  
+  <div class="tabela"><table class="reqs">
+    <thead><tr><th>ID</th><th>Requisito</th><th title="Prioridade">Prior.</th><th>Fase</th></tr></thead>
+    <tbody><tr id="RF-09.1" data-prio="S" data-fase="3" data-busca="rf-09.1 disponibilizar formulário de contato geral do coletivo."><td class="id">RF-09.1</td><td>Disponibilizar formulário de contato geral do coletivo.</td><td><span class="prio p-S" title="Should">S</span></td><td><span class="fase"><span class="so-celular">Fase </span>3</span></td></tr><tr id="RF-09.2" data-prio="C" data-fase="3" data-busca="rf-09.2 exibir os últimos posts do instagram na página inicial."><td class="id">RF-09.2</td><td>Exibir os últimos posts do Instagram na página inicial.</td><td><span class="prio p-C" title="Could">C</span></td><td><span class="fase"><span class="so-celular">Fase </span>3</span></td></tr><tr id="RF-09.3" data-prio="W" data-fase="—" data-busca="rf-09.3 permitir cadastro de e-mail para newsletter."><td class="id">RF-09.3</td><td>Permitir cadastro de e-mail para newsletter.</td><td><span class="prio p-W" title="Won't">W</span></td><td><span class="fase"><span class="so-celular">Fase </span>—</span></td></tr></tbody>
+  </table></div>
+  
+</section>
+
+<section class="modulo" id="RF-10" data-modulo="RF-10">
+  <h3><span class="id">RF-10</span> Círculo de leitura <em>(nome provisório)</em> <span class="conta"></span></h3>
+  <p class="desc">As participantes se comprometem a ler, em cada dia da semana, um capítulo definido no cronograma e a comentar nele um número mínimo de vezes no Wattpad. O site organiza o cronograma, recebe os registros das participantes e calcula automaticamente quem cumpriu as metas, para que as administradoras não precisem fazer essa conferência à mão.
+A leitura e os comentários continuam acontecendo <strong>no Wattpad</strong>. O site não verifica o Wattpad diretamente: cada participante <strong>declara</strong> o que fez, com evidência opcional (links dos comentários). As administradoras conferem por amostragem.</p>
+  <div class="tabela"><table class="reqs">
+    <thead><tr><th>ID</th><th>Requisito</th><th title="Prioridade">Prior.</th><th>Fase</th></tr></thead>
+    <tbody><tr id="RF-10.1" data-prio="M" data-fase="2" data-busca="rf-10.1 participantes devem acessar uma área restrita com login e senha, com perfil de acesso **participante** (vê apenas o próprio painel e o cronograma)."><td class="id">RF-10.1</td><td>Participantes devem acessar uma área restrita com login e senha, com perfil de acesso <strong>Participante</strong> (vê apenas o próprio painel e o cronograma).</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-10.2" data-prio="M" data-fase="2" data-busca="rf-10.2 administradoras devem poder cadastrar, convidar e desativar participantes. não há cadastro aberto."><td class="id">RF-10.2</td><td>Administradoras devem poder cadastrar, convidar e desativar participantes. Não há cadastro aberto.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-10.3" data-prio="M" data-fase="2" data-busca="rf-10.3 administradoras devem poder cadastrar as histórias participantes do círculo (título, autora, link do wattpad) e seus capítulos. quando a história já existir na vitrine (rf-04), o cadastro deve ser reaproveitado."><td class="id">RF-10.3</td><td>Administradoras devem poder cadastrar as histórias participantes do círculo (título, autora, link do Wattpad) e seus capítulos. Quando a história já existir na Vitrine (<a class="ref" href="#RF-04" data-ref="RF-04">RF-04</a>), o cadastro deve ser reaproveitado.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-10.4" data-prio="M" data-fase="2" data-busca="rf-10.4 administradoras devem poder montar o **cronograma**: para cada dia, qual capítulo (história + capítulo + link) deve ser lido."><td class="id">RF-10.4</td><td>Administradoras devem poder montar o <strong>cronograma</strong>: para cada dia, qual capítulo (história + capítulo + link) deve ser lido.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-10.5" data-prio="M" data-fase="2" data-busca="rf-10.5 administradoras devem poder configurar as **metas**: número mínimo de comentários por capítulo *(valor a definir)* e quais dias da semana contam."><td class="id">RF-10.5</td><td>Administradoras devem poder configurar as <strong>metas</strong>: número mínimo de comentários por capítulo <em>(valor a definir)</em> e quais dias da semana contam.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-10.6" data-prio="M" data-fase="2" data-busca="rf-10.6 a participante deve ver um painel com o capítulo do dia (com link direto para o wattpad), suas pendências e o progresso da semana."><td class="id">RF-10.6</td><td>A participante deve ver um painel com o capítulo do dia (com link direto para o Wattpad), suas pendências e o progresso da semana.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-10.7" data-prio="M" data-fase="2" data-busca="rf-10.7 a participante deve poder registrar que leu o capítulo do dia e quantos comentários fez nele."><td class="id">RF-10.7</td><td>A participante deve poder registrar que leu o capítulo do dia e quantos comentários fez nele.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-10.8" data-prio="S" data-fase="2" data-busca="rf-10.8 ao registrar, a participante deve poder informar o(s) link(s) do(s) comentário(s) como evidência. as administradoras podem tornar isso obrigatório."><td class="id">RF-10.8</td><td>Ao registrar, a participante deve poder informar o(s) link(s) do(s) comentário(s) como evidência. As administradoras podem tornar isso obrigatório.</td><td><span class="prio p-S" title="Should">S</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-10.9" data-prio="M" data-fase="2" data-busca="rf-10.9 o sistema deve calcular automaticamente se cada participante cumpriu a meta, por dia e por semana."><td class="id">RF-10.9</td><td>O sistema deve calcular automaticamente se cada participante cumpriu a meta, por dia e por semana.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-10.10" data-prio="M" data-fase="2" data-busca="rf-10.10 administradoras devem ver um painel com a situação de todas as participantes (*cumpriu*, *parcial*, *pendente*, *ausência justificada*), com filtro por período."><td class="id">RF-10.10</td><td>Administradoras devem ver um painel com a situação de todas as participantes (<em>cumpriu</em>, <em>parcial</em>, <em>pendente</em>, <em>ausência justificada</em>), com filtro por período.</td><td><span class="prio p-M" title="Must">M</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-10.11" data-prio="S" data-fase="2" data-busca="rf-10.11 administradoras devem poder marcar registros como *conferidos* ou *contestados* (conferência por amostragem)."><td class="id">RF-10.11</td><td>Administradoras devem poder marcar registros como <em>conferidos</em> ou <em>contestados</em> (conferência por amostragem).</td><td><span class="prio p-S" title="Should">S</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-10.12" data-prio="S" data-fase="2" data-busca="rf-10.12 permitir registrar **ausências justificadas** (férias, imprevistos), que não contam como descumprimento da meta."><td class="id">RF-10.12</td><td>Permitir registrar <strong>ausências justificadas</strong> (férias, imprevistos), que não contam como descumprimento da meta.</td><td><span class="prio p-S" title="Should">S</span></td><td><span class="fase"><span class="so-celular">Fase </span>2</span></td></tr><tr id="RF-10.13" data-prio="S" data-fase="3" data-busca="rf-10.13 a participante deve poder consultar o próprio histórico de participação."><td class="id">RF-10.13</td><td>A participante deve poder consultar o próprio histórico de participação.</td><td><span class="prio p-S" title="Should">S</span></td><td><span class="fase"><span class="so-celular">Fase </span>3</span></td></tr><tr id="RF-10.14" data-prio="C" data-fase="3" data-busca="rf-10.14 gerar relatório semanal/mensal exportável (csv) com o cumprimento das metas."><td class="id">RF-10.14</td><td>Gerar relatório semanal/mensal exportável (CSV) com o cumprimento das metas.</td><td><span class="prio p-C" title="Could">C</span></td><td><span class="fase"><span class="so-celular">Fase </span>3</span></td></tr><tr id="RF-10.15" data-prio="C" data-fase="3" data-busca="rf-10.15 enviar lembretes por e-mail para participantes com pendências."><td class="id">RF-10.15</td><td>Enviar lembretes por e-mail para participantes com pendências.</td><td><span class="prio p-C" title="Could">C</span></td><td><span class="fase"><span class="so-celular">Fase </span>3</span></td></tr><tr id="RF-10.16" data-prio="W" data-fase="—" data-busca="rf-10.16 verificar automaticamente leituras e comentários direto no wattpad. só será considerado se houver um meio **oficial e permitido** pelos termos de serviço do wattpad."><td class="id">RF-10.16</td><td>Verificar automaticamente leituras e comentários direto no Wattpad. Só será considerado se houver um meio <strong>oficial e permitido</strong> pelos Termos de Serviço do Wattpad.</td><td><span class="prio p-W" title="Won't">W</span></td><td><span class="fase"><span class="so-celular">Fase </span>—</span></td></tr></tbody>
+  </table></div>
+  <div class="nota"><p><strong>Nota de engenharia:</strong> o sistema não deve acessar o Wattpad com as credenciais das participantes nem usar raspagem ou APIs não oficiais (ver <a class="ref" href="#RNF-27" data-ref="RNF-27">RNF-27</a>). Entidades principais: <em>Participante</em>, <em>História</em>, <em>Capítulo</em>, <em>Cronograma (dia → capítulo)</em>, <em>Meta</em>, <em>Registro</em> (participante, capítulo, data, nº de comentários, links, status de conferência) e <em>Ausência</em>.</p></div>
+</section>
+  </section>
+
+  <section class="painel" id="aba-rnf">
+    <div class="filtros">
+      <div class="grupo"><span class="rotulo">Buscar</span><input type="search" id="busca-rnf" placeholder="Palavra ou ID (ex.: LGPD, RNF-25)"></div>
+    </div>
+    
+<section class="modulo">
+  <h3>Usabilidade e acessibilidade <span class="conta"></span></h3>
+  <div class="tabela"><table class="reqs">
+    <thead><tr><th>ID</th><th>Requisito</th></tr></thead>
+    <tbody><tr id="RNF-01" data-busca="rnf-01 **mobile first:** o site deve funcionar bem em celulares, já que a maior parte do público virá de links nas redes sociais e as participantes do círculo de leitura vão registrar a leitura diária pelo celular. deve ser responsivo de 360px de largura até desktop."><td class="id">RNF-01</td><td><strong>Mobile first:</strong> o site deve funcionar bem em celulares, já que a maior parte do público virá de links nas redes sociais e as participantes do círculo de leitura vão registrar a leitura diária pelo celular. Deve ser responsivo de 360px de largura até desktop.</td></tr><tr id="RNF-02" data-busca="rnf-02 seguir as diretrizes **wcag 2.1 nível aa**: contraste adequado, textos alternativos em imagens, navegação por teclado, fontes legíveis."><td class="id">RNF-02</td><td>Seguir as diretrizes <strong>WCAG 2.1 nível AA</strong>: contraste adequado, textos alternativos em imagens, navegação por teclado, fontes legíveis.</td></tr><tr id="RNF-03" data-busca="rnf-03 todo o conteúdo e a interface devem estar em **português do brasil**."><td class="id">RNF-03</td><td>Todo o conteúdo e a interface devem estar em <strong>português do Brasil</strong>.</td></tr><tr id="RNF-04" data-busca="rnf-04 a área administrativa deve ser utilizável por pessoas sem conhecimento técnico (sem html, sem markdown obrigatório)."><td class="id">RNF-04</td><td>A área administrativa deve ser utilizável por pessoas sem conhecimento técnico (sem HTML, sem Markdown obrigatório).</td></tr><tr id="RNF-05" data-busca="rnf-05 qualquer conteúdo deve ser alcançável em no máximo **3 cliques** a partir da página inicial."><td class="id">RNF-05</td><td>Qualquer conteúdo deve ser alcançável em no máximo <strong>3 cliques</strong> a partir da página inicial.</td></tr></tbody>
+  </table></div>
+</section>
+
+<section class="modulo">
+  <h3>Identidade visual <span class="conta"></span></h3>
+  <div class="tabela"><table class="reqs">
+    <thead><tr><th>ID</th><th>Requisito</th></tr></thead>
+    <tbody><tr id="RNF-06" data-busca="rnf-06 o visual deve ser coerente com a identidade das redes sociais do coletivo (cores, logo, tipografia)."><td class="id">RNF-06</td><td>O visual deve ser coerente com a identidade das redes sociais do coletivo (cores, logo, tipografia).</td></tr><tr id="RNF-07" data-busca="rnf-07 deve existir um guia de estilo mínimo (paleta de cores, fontes, componentes) antes do desenvolvimento das telas."><td class="id">RNF-07</td><td>Deve existir um guia de estilo mínimo (paleta de cores, fontes, componentes) antes do desenvolvimento das telas.</td></tr></tbody>
+  </table></div>
+</section>
+
+<section class="modulo">
+  <h3>Desempenho <span class="conta"></span></h3>
+  <div class="tabela"><table class="reqs">
+    <thead><tr><th>ID</th><th>Requisito</th></tr></thead>
+    <tbody><tr id="RNF-08" data-busca="rnf-08 as páginas públicas devem carregar em até **3 segundos** em conexão 4g."><td class="id">RNF-08</td><td>As páginas públicas devem carregar em até <strong>3 segundos</strong> em conexão 4G.</td></tr><tr id="RNF-09" data-busca="rnf-09 imagens enviadas devem ser otimizadas automaticamente (redimensionamento/compressão)."><td class="id">RNF-09</td><td>Imagens enviadas devem ser otimizadas automaticamente (redimensionamento/compressão).</td></tr><tr id="RNF-10" data-busca="rnf-10 arquivos de materiais para download devem ter limite de tamanho (sugestão: 20 mb)."><td class="id">RNF-10</td><td>Arquivos de materiais para download devem ter limite de tamanho (sugestão: 20 MB).</td></tr></tbody>
+  </table></div>
+</section>
+
+<section class="modulo">
+  <h3>Segurança e privacidade <span class="conta"></span></h3>
+  <div class="tabela"><table class="reqs">
+    <thead><tr><th>ID</th><th>Requisito</th></tr></thead>
+    <tbody><tr id="RNF-11" data-busca="rnf-11 todo o site deve ser servido via **https**."><td class="id">RNF-11</td><td>Todo o site deve ser servido via <strong>HTTPS</strong>.</td></tr><tr id="RNF-12" data-busca="rnf-12 senhas devem ser armazenadas com hash seguro; nunca em texto puro."><td class="id">RNF-12</td><td>Senhas devem ser armazenadas com hash seguro; nunca em texto puro.</td></tr><tr id="RNF-13" data-busca="rnf-13 a área administrativa deve ser protegida contra acessos não autorizados (autenticação, limite de tentativas de login)."><td class="id">RNF-13</td><td>A área administrativa deve ser protegida contra acessos não autorizados (autenticação, limite de tentativas de login).</td></tr><tr id="RNF-14" data-busca="rnf-14 cumprir a **lgpd**: política de privacidade publicada, coleta mínima de dados pessoais, consentimento em formulários."><td class="id">RNF-14</td><td>Cumprir a <strong>LGPD</strong>: política de privacidade publicada, coleta mínima de dados pessoais, consentimento em formulários.</td></tr><tr id="RNF-15" data-busca="rnf-15 uploads devem aceitar apenas tipos de arquivo permitidos (imagens e pdf, inicialmente)."><td class="id">RNF-15</td><td>Uploads devem aceitar apenas tipos de arquivo permitidos (imagens e PDF, inicialmente).</td></tr><tr id="RNF-16" data-busca="rnf-16 fotos e dados das integrantes só podem ser publicados com autorização delas."><td class="id">RNF-16</td><td>Fotos e dados das integrantes só podem ser publicados com autorização delas.</td></tr><tr id="RNF-25" data-busca="rnf-25 participantes do círculo de leitura devem ser informadas, antes de começar, de quais dados de atividade são registrados, quem pode vê-los e por quanto tempo são guardados, e devem dar consentimento (lgpd)."><td class="id">RNF-25</td><td>Participantes do círculo de leitura devem ser informadas, antes de começar, de quais dados de atividade são registrados, quem pode vê-los e por quanto tempo são guardados, e devem dar consentimento (LGPD).</td></tr><tr id="RNF-26" data-busca="rnf-26 os dados de desempenho de cada participante devem ser visíveis apenas para ela e para as administradoras, salvo decisão diferente do coletivo (ver questões em aberto)."><td class="id">RNF-26</td><td>Os dados de desempenho de cada participante devem ser visíveis apenas para ela e para as administradoras, salvo decisão diferente do coletivo (ver questões em aberto).</td></tr><tr id="RNF-27" data-busca="rnf-27 o site **nunca** deve pedir nem armazenar a senha do wattpad das participantes, nem automatizar o acesso ao wattpad em nome delas."><td class="id">RNF-27</td><td>O site <strong>nunca</strong> deve pedir nem armazenar a senha do Wattpad das participantes, nem automatizar o acesso ao Wattpad em nome delas.</td></tr></tbody>
+  </table></div>
+</section>
+
+<section class="modulo">
+  <h3>Visibilidade (SEO e compartilhamento) <span class="conta"></span></h3>
+  <div class="tabela"><table class="reqs">
+    <thead><tr><th>ID</th><th>Requisito</th></tr></thead>
+    <tbody><tr id="RNF-17" data-busca="rnf-17 cada página deve ter título e descrição próprios para mecanismos de busca."><td class="id">RNF-17</td><td>Cada página deve ter título e descrição próprios para mecanismos de busca.</td></tr><tr id="RNF-18" data-busca="rnf-18 links compartilhados nas redes devem exibir prévia com imagem, título e descrição (open graph)."><td class="id">RNF-18</td><td>Links compartilhados nas redes devem exibir prévia com imagem, título e descrição (Open Graph).</td></tr><tr id="RNF-19" data-busca="rnf-19 urls devem ser legíveis (ex.: `/biblioteca/pontuacao/uso-da-virgula`)."><td class="id">RNF-19</td><td>URLs devem ser legíveis (ex.: <code>/biblioteca/pontuacao/uso-da-virgula</code>).</td></tr></tbody>
+  </table></div>
+</section>
+
+<section class="modulo">
+  <h3>Manutenibilidade e operação <span class="conta"></span></h3>
+  <div class="tabela"><table class="reqs">
+    <thead><tr><th>ID</th><th>Requisito</th></tr></thead>
+    <tbody><tr id="RNF-20" data-busca="rnf-20 a arquitetura deve permitir adicionar novas seções e funcionalidades de forma incremental, sem reescrever o que já existe."><td class="id">RNF-20</td><td>A arquitetura deve permitir adicionar novas seções e funcionalidades de forma incremental, sem reescrever o que já existe.</td></tr><tr id="RNF-21" data-busca="rnf-21 o código deve ser versionado no github, com readme e instruções de execução local."><td class="id">RNF-21</td><td>O código deve ser versionado no GitHub, com README e instruções de execução local.</td></tr><tr id="RNF-22" data-busca="rnf-22 deve haver backup periódico do banco de dados e dos arquivos enviados."><td class="id">RNF-22</td><td>Deve haver backup periódico do banco de dados e dos arquivos enviados.</td></tr><tr id="RNF-23" data-busca="rnf-23 o custo de hospedagem deve ser **baixo ou gratuito**. por ser um projeto **sem fins lucrativos**, devem ser priorizadas soluções gratuitas ou de baixo custo (hospedagem, envio de e-mails, domínio)."><td class="id">RNF-23</td><td>O custo de hospedagem deve ser <strong>baixo ou gratuito</strong>. Por ser um projeto <strong>sem fins lucrativos</strong>, devem ser priorizadas soluções gratuitas ou de baixo custo (hospedagem, envio de e-mails, domínio).</td></tr><tr id="RNF-24" data-busca="rnf-24 funcionalidades principais devem ter testes automatizados. isso inclui o cálculo de cumprimento das metas (rf-10.9)."><td class="id">RNF-24</td><td>Funcionalidades principais devem ter testes automatizados. Isso inclui o cálculo de cumprimento das metas (<a class="ref" href="#RF-10.9" data-ref="RF-10.9">RF-10.9</a>).</td></tr></tbody>
+  </table></div>
+</section>
+  </section>
+
+  <section class="painel" id="aba-roadmap"><div class="doc"><p>O cliente pediu para <strong>construir o site aos poucos, com calma, começando pelas funções mais simples</strong>. A proposta abaixo divide o projeto em fases; cada fase entrega algo utilizável e publicável.</p>
+<hr>
+<h3>Fase 1 — Presença básica (site institucional)</h3>
+<p><strong>Objetivo:</strong> ter um endereço para colocar na bio das redes sociais.</p>
+<ul><li>Página inicial com apresentação do coletivo (<a class="ref" href="#RF-00.2" data-ref="RF-00.2">RF-00.2</a>)</li><li>Menu, rodapé, links para redes sociais e contato (<a class="ref" href="#RF-00.1" data-ref="RF-00.1">RF-00.1</a>, <a class="ref" href="#RF-00.3" data-ref="RF-00.3">RF-00.3</a>, <a class="ref" href="#RF-00.4" data-ref="RF-00.4">RF-00.4</a>)</li><li>Conheça as autoras — perfis das integrantes (<a class="ref" href="#RF-06.1" data-ref="RF-06.1">RF-06.1</a>, <a class="ref" href="#RF-06.2" data-ref="RF-06.2">RF-06.2</a>)</li><li>Layout responsivo e identidade visual (<a class="ref" href="#RNF-01" data-ref="RNF-01">RNF-01</a>, <a class="ref" href="#RNF-06" data-ref="RNF-06">RNF-06</a>)</li></ul>
+<blockquote><p>Nesta fase o conteúdo pode ser cadastrado diretamente pela equipe de desenvolvimento (ainda sem área administrativa).</p></blockquote>
+<h3>Fase 2 — Área administrativa, círculo de leitura e conteúdos (MVP completo)</h3>
+<p><strong>Objetivo:</strong> o site passa a ser ferramenta do círculo de leitura e espaço de aprendizado e divulgação.</p>
+<p>Como é uma fase grande, a proposta é dividi-la em duas entregas:</p>
+<h4>Fase 2a — Área administrativa + círculo de leitura</h4>
+<ul><li>Área administrativa com login e recuperação de senha (<a class="ref" href="#RF-07.1" data-ref="RF-07.1">RF-07.1</a>, <a class="ref" href="#RF-07.11" data-ref="RF-07.11">RF-07.11</a>)</li><li>Contas de participantes e cadastro de histórias e capítulos (<a class="ref" href="#RF-10.1" data-ref="RF-10.1">RF-10.1</a> a <a class="ref" href="#RF-10.3" data-ref="RF-10.3">RF-10.3</a>)</li><li>Cronograma, metas, painel da participante e registro de leituras (<a class="ref" href="#RF-10.4" data-ref="RF-10.4">RF-10.4</a> a <a class="ref" href="#RF-10.8" data-ref="RF-10.8">RF-10.8</a>)</li><li>Cálculo automático das metas e painel das administradoras (<a class="ref" href="#RF-10.9" data-ref="RF-10.9">RF-10.9</a> a <a class="ref" href="#RF-10.12" data-ref="RF-10.12">RF-10.12</a>)</li><li>Termo de consentimento e transparência sobre os dados (<a class="ref" href="#RNF-25" data-ref="RNF-25">RNF-25</a> a <a class="ref" href="#RNF-27" data-ref="RNF-27">RNF-27</a>)</li></ul>
+<blockquote><p>O círculo de leitura vem antes das seções de conteúdo porque resolve um trabalho manual que já existe hoje (a conferência das metas). A ordem pode ser invertida se o coletivo preferir.</p></blockquote>
+<h4>Fase 2b — Conteúdos, Vitrine e materiais</h4>
+<ul><li>Editor, rascunhos e uploads (<a class="ref" href="#RF-07.2" data-ref="RF-07.2">RF-07.2</a> a <a class="ref" href="#RF-07.8" data-ref="RF-07.8">RF-07.8</a>)</li><li>Biblioteca de conteúdos (<a class="ref" href="#RF-01" data-ref="RF-01">RF-01</a>)</li><li>Espaço criativo (<a class="ref" href="#RF-02" data-ref="RF-02">RF-02</a>)</li><li>Marketing literário (<a class="ref" href="#RF-03" data-ref="RF-03">RF-03</a>)</li><li>Vitrine de histórias (<a class="ref" href="#RF-04" data-ref="RF-04">RF-04</a>), reaproveitando as histórias já cadastradas no círculo</li><li>Dicas e materiais gratuitos (<a class="ref" href="#RF-05" data-ref="RF-05">RF-05</a>)</li><li>Obras e conteúdos no perfil das autoras (<a class="ref" href="#RF-06.2" data-ref="RF-06.2">RF-06.2</a>, <a class="ref" href="#RF-06.3" data-ref="RF-06.3">RF-06.3</a>)</li></ul>
+<h3>Fase 3 — Melhorias de descoberta e engajamento</h3>
+<ul><li>Busca global (<a class="ref" href="#RF-00.5" data-ref="RF-00.5">RF-00.5</a>)</li><li>Compartilhamento nas redes (<a class="ref" href="#RF-00.6" data-ref="RF-00.6">RF-00.6</a>)</li><li>Conteúdos relacionados e tags (<a class="ref" href="#RF-01.6" data-ref="RF-01.6">RF-01.6</a>, <a class="ref" href="#RF-01.7" data-ref="RF-01.7">RF-01.7</a>)</li><li>Obras em destaque na página inicial (<a class="ref" href="#RF-04.5" data-ref="RF-04.5">RF-04.5</a>)</li><li>Filtros adicionais e contagem de downloads (<a class="ref" href="#RF-05.4" data-ref="RF-05.4">RF-05.4</a>, <a class="ref" href="#RF-05.5" data-ref="RF-05.5">RF-05.5</a>)</li><li>Perfis de acesso Administradora/Autora (<a class="ref" href="#RF-07.9" data-ref="RF-07.9">RF-07.9</a>)</li><li>Agendamento de publicações (<a class="ref" href="#RF-07.10" data-ref="RF-07.10">RF-07.10</a>)</li><li>Formulário de contato e feed do Instagram (<a class="ref" href="#RF-09.1" data-ref="RF-09.1">RF-09.1</a>, <a class="ref" href="#RF-09.2" data-ref="RF-09.2">RF-09.2</a>)</li><li>Círculo de leitura: histórico da participante, relatórios exportáveis e lembretes por e-mail (<a class="ref" href="#RF-10.13" data-ref="RF-10.13">RF-10.13</a> a <a class="ref" href="#RF-10.15" data-ref="RF-10.15">RF-10.15</a>)</li></ul>
+<h3>Fase 4 — Serviços das integrantes</h3>
+<ul><li>Catálogo de serviços com portfólio e contato (<a class="ref" href="#RF-08" data-ref="RF-08">RF-08</a>)</li><li>Serviços exibidos no perfil da autora (<a class="ref" href="#RF-06.4" data-ref="RF-06.4">RF-06.4</a>)</li></ul>
+<h3>Ideias para o futuro (sem fase definida)</h3>
+<ul><li>Vitrine aberta a escritoras convidadas (<a class="ref" href="#RF-04.7" data-ref="RF-04.7">RF-04.7</a>)</li><li>Newsletter (<a class="ref" href="#RF-09.3" data-ref="RF-09.3">RF-09.3</a>)</li><li>Verificação automática no Wattpad, só se houver um meio oficial e permitido (<a class="ref" href="#RF-10.16" data-ref="RF-10.16">RF-10.16</a>)</li></ul></div></section>
+  <section class="painel" id="aba-visao"><div class="doc"><h3>1. Contexto</h3>
+<p>A <strong>Constelação Literária</strong> é um coletivo de escritoras que já atua nas redes sociais (Instagram, TikTok, Wattpad) oferecendo conteúdos, materiais e apoio a outras escritoras. Hoje esse conteúdo está espalhado em posts e perfis diferentes, o que dificulta encontrar um material antigo, navegar por temas ou conhecer o trabalho das integrantes.</p>
+<p>Além dos conteúdos, o coletivo mantém um <strong>círculo de leitura</strong>: as escritoras participantes se comprometem a ler um capítulo por dia e a comentar nele um número mínimo de vezes. Hoje as administradoras conferem manualmente se todas estão cumprindo as metas.</p>
+<p>O projeto é <strong>sem fins lucrativos</strong>. Seu único propósito é incentivar a leitura e a escrita. As histórias envolvidas ficam no Wattpad, que disponibiliza histórias e fanfics gratuitamente.</p>
+<h3>2. Visão</h3>
+<blockquote><p>Um site que funcione como <strong>extensão das redes sociais</strong> do coletivo: um espaço de <strong>aprendizado, divulgação e apoio</strong> para escritoras, e não apenas uma página de apresentação.</p></blockquote>
+<h3>3. Objetivos</h3>
+<div class='tabela'><table><thead><tr><th>#</th><th>Objetivo</th><th>Como saberemos que foi atingido</th></tr></thead><tbody><tr><td>O1</td><td>Centralizar os conteúdos educativos hoje espalhados nas redes</td><td>Conteúdos organizados por seção e categoria, fáceis de buscar</td></tr><tr><td>O2</td><td>Divulgar as obras das integrantes e ajudar novas histórias a encontrar leitores</td><td>Vitrine com sinopses e links para Wattpad / outras plataformas</td></tr><tr><td>O3</td><td>Oferecer materiais gratuitos (guias, modelos, checklists)</td><td>Materiais disponíveis para visualização e download</td></tr><tr><td>O4</td><td>Apresentar as pessoas por trás do projeto</td><td>Página "Conheça as autoras" publicada</td></tr><tr><td>O5</td><td>Facilitar o acompanhamento do círculo de leitura</td><td>As participantes registram suas leituras e comentários no site, e as administradoras veem quem cumpriu as metas sem precisar contar à mão</td></tr><tr><td>O6</td><td>Crescer de forma incremental, com calma</td><td>Entregas em fases, começando pelo mais simples (ver <a href="#roadmap" data-aba="roadmap">04-roadmap.md</a>)</td></tr></tbody></table></div>
+<h3>4. Partes interessadas</h3>
+<div class='tabela'><table><thead><tr><th>Parte interessada</th><th>Interesse</th></tr></thead><tbody><tr><td>Integrantes da Constelação Literária</td><td>Publicar conteúdos, divulgar suas obras e (futuramente) seus serviços</td></tr><tr><td>Participantes do círculo de leitura</td><td>Saber o que ler a cada dia, registrar o que fizeram e acompanhar o próprio progresso</td></tr><tr><td>Escritoras iniciantes / em desenvolvimento</td><td>Aprender, encontrar materiais e inspiração</td></tr><tr><td>Leitoras e leitores</td><td>Descobrir novas histórias</td></tr><tr><td>Seguidoras das redes sociais</td><td>Acessar com facilidade o que viram nos posts</td></tr><tr><td>Equipe de desenvolvimento</td><td>Requisitos claros e evolução em etapas</td></tr></tbody></table></div>
+<h3>5. Personas</h3>
+<p><strong>Ana, escritora iniciante (público principal)</strong> Escreve no Wattpad há poucos meses, ainda não tem livro publicado. Quer melhorar a pontuação, entender como construir personagens e aprender a divulgar sua história no TikTok. Acessa principalmente pelo celular, vinda de um link na bio do Instagram.</p>
+<p><strong>Bruno, leitor</strong> Procura histórias novas para ler. Chega ao site por indicação e quer ver sinopses e ir direto para o Wattpad.</p>
+<p><strong>Carla, integrante do coletivo (administradora de conteúdo)</strong> Produz dicas e materiais. Precisa publicar e editar conteúdos sem depender de conhecimento técnico. Também coordena o círculo de leitura: monta o cronograma e precisa saber, no fim da semana, quem cumpriu as metas, sem abrir capítulo por capítulo no Wattpad para contar comentários.</p>
+<p><strong>Daniela, participante do círculo de leitura</strong> Escreve uma história no Wattpad e participa do círculo. Todo dia quer abrir o site no celular, ver qual capítulo tem que ler, ir direto para o Wattpad e, depois de ler e comentar, registrar isso em poucos toques.</p>
+<h3>6. Escopo</h3>
+<h4>Dentro do escopo (visão completa)</h4>
+<ol><li value="1">Página inicial</li><li value="2">Biblioteca de conteúdos</li><li value="3">Espaço criativo</li><li value="4">Marketing literário</li><li value="5">Vitrine de histórias</li><li value="6">Dicas e materiais gratuitos</li><li value="7">Conheça as autoras</li><li value="8">Área administrativa para as integrantes gerenciarem o conteúdo</li><li value="9">Círculo de leitura: cronograma, registro de leituras e comentários e acompanhamento das metas (ver <a class="ref" href="#RF-10" data-ref="RF-10">RF-10</a>)</li></ol>
+<h4>Futuro / a avaliar</h4>
+<ul><li><strong>Serviços das integrantes</strong> (capas, revisão textual, identidade visual etc.) — sugerido pelo cliente como ideia extra.</li></ul>
+<h4>Fora do escopo (por enquanto)</h4>
+<ul><li>Venda de produtos ou pagamentos online</li><li>Cadastro aberto de leitoras/escritoras (contas públicas). As contas das participantes do círculo de leitura são criadas pelas administradoras.</li><li>Verificação automática da atividade no Wattpad (leituras e comentários). Não existe API oficial conhecida para isso, e a raspagem pode violar os Termos de Serviço do Wattpad (ver <a class="ref" href="#RF-10.16" data-ref="RF-10.16">RF-10.16</a>)</li><li>Comentários, fórum ou rede social própria</li><li>Aplicativo mobile nativo</li></ul>
+<h3>7. Glossário</h3>
+<div class='tabela'><table><thead><tr><th>Termo</th><th>Significado</th></tr></thead><tbody><tr><td><strong>Integrante</strong></td><td>Membro do coletivo Constelação Literária</td></tr><tr><td><strong>Conteúdo</strong></td><td>Texto/artigo educativo (dica, tutorial, guia) publicado em uma seção</td></tr><tr><td><strong>Material</strong></td><td>Arquivo para download (PDF, modelo, checklist)</td></tr><tr><td><strong>Obra</strong></td><td>História/livro de uma integrante exibido na Vitrine</td></tr><tr><td><strong>Seção</strong></td><td>Grande área do site (ex.: Biblioteca, Marketing literário)</td></tr><tr><td><strong>Categoria</strong></td><td>Subdivisão temática dentro de uma seção (ex.: Pontuação, Personagens)</td></tr><tr><td><strong>Administradora</strong></td><td>Integrante com acesso à área de gestão do site</td></tr><tr><td><strong>Círculo de leitura</strong></td><td>Grupo de escritoras que se compromete a ler e comentar capítulos umas das outras seguindo um cronograma <em>(nome provisório)</em></td></tr><tr><td><strong>Participante</strong></td><td>Escritora inscrita no círculo de leitura, com conta no site. Pode ou não ser integrante do coletivo</td></tr><tr><td><strong>Cronograma</strong></td><td>Definição de qual capítulo deve ser lido em cada dia</td></tr><tr><td><strong>Meta</strong></td><td>Quantidade mínima de leituras e comentários esperada por dia/semana</td></tr><tr><td><strong>Registro</strong></td><td>Declaração da participante de que leu um capítulo e comentou nele, opcionalmente com links como evidência</td></tr><tr><td><strong>Ausência justificada</strong></td><td>Período em que a participante está dispensada das metas (férias, imprevistos)</td></tr></tbody></table></div></div></section>
+  <section class="painel" id="aba-questoes"><div class="doc"><p>Pontos que o pedido não deixa claros e que influenciam o desenvolvimento.</p>
+<h3>Identidade e escopo</h3>
+<ol><li value="1"><strong>Nome do projeto:</strong> o repositório se chama <em>as-quatro-constelacoes</em>, mas o texto do cliente fala em <em>Constelação Literária</em>. Qual é o nome oficial do site? O coletivo tem exatamente quatro integrantes?</li><li value="2">Já existe <strong>logo, paleta de cores e tipografia</strong> definidos nas redes sociais?</li><li value="3">Já existe um <strong>domínio</strong> (ex.: <code>constelacaoliteraria.com.br</code>)? Se não, quem vai registrar e pagar?</li></ol>
+<h3>Conteúdo</h3>
+<ol><li value="4">Quem vai <strong>publicar e manter</strong> os conteúdos? Todas as integrantes ou apenas uma ou duas pessoas?</li><li value="5">Os conteúdos do site serão <strong>cópias dos posts</strong> das redes, versões expandidas, ou conteúdos exclusivos?</li><li value="6">Existe um volume inicial de conteúdo pronto para a primeira publicação? Quantos itens por seção, aproximadamente?</li><li value="7">As categorias propostas em <a href="#rf" data-aba="rf">02-requisitos-funcionais.md</a> estão corretas? Faltam ou sobram categorias?</li><li value="8">Os materiais gratuitos já existem em PDF/Canva/Google Docs?</li></ol>
+<h3>Vitrine de histórias</h3>
+<ol><li value="9">Somente obras das <strong>integrantes</strong> aparecem na Vitrine, ou também de outras escritoras (convidadas, parceiras, seguidoras)? Se sim, como seria a seleção?</li><li value="10">Que informações de cada obra são essenciais? (gênero, classificação indicativa, número de capítulos, status, alertas de conteúdo…)</li></ol>
+<h3>Público e interação</h3>
+<ol><li value="11">Leitoras/escritoras visitantes vão precisar <strong>criar conta</strong> em algum momento (ex.: salvar favoritos, comentar)? Hoje está fora do escopo. <em>(As contas do círculo de leitura são um caso à parte: ver seção abaixo.)</em></li><li value="12">Há interesse em captar e-mails (newsletter) para avisar sobre novos conteúdos?</li></ol>
+<h3>Círculo de leitura</h3>
+<ol><li value="13"><strong>Quem participa?</strong> Só as integrantes do coletivo ou também outras escritoras do Wattpad? Quantas pessoas, aproximadamente? Como alguém entra ou sai do grupo?</li><li value="14"><strong>Qual capítulo é lido em cada dia?</strong> Existe rodízio entre as histórias das participantes? Todas leem o mesmo capítulo no mesmo dia? A participante lê a própria história?</li><li value="15"><strong>Quem monta o cronograma</strong> e com quanta antecedência?</li><li value="16"><strong>Quantos comentários</strong> por capítulo formam a meta? O que conta como comentário: só no fim do capítulo ou também nos parágrafos? Comentários muito curtos ("amei!") valem?</li><li value="17"><strong>"Cada dia da semana"</strong> inclui sábado e domingo? Há tolerância para atrasos, por exemplo registrar o capítulo de ontem hoje?</li><li value="18"><strong>O que acontece quando alguém não cumpre a meta?</strong> Só um aviso, alguma consequência, saída do grupo? Isso define que alertas e relatórios o sistema precisa ter.</li><li value="19"><strong>Evidência:</strong> o link do comentário deve ser obrigatório ou opcional? As administradoras querem conferir todos os registros ou por amostragem?</li><li value="20"><strong>Privacidade:</strong> as participantes veem o desempenho umas das outras (ex.: um ranking) ou só as administradoras? <em>(Afeta <a class="ref" href="#RNF-26" data-ref="RNF-26">RNF-26</a>.)</em></li><li value="21">As regras de comunidade do Wattpad aceitam esse tipo de <strong>troca combinada de comentários</strong>? Vale conferir para não colocar as contas das participantes em risco.</li><li value="22"><strong>Nome:</strong> "Círculo de leitura" é provisório. Como o coletivo chama esse grupo?</li></ol>
+<h3>Serviços (ideia futura)</h3>
+<ol><li value="23">Os serviços serão apenas <strong>divulgados</strong> (contato direto com a integrante) ou haveria orçamento/pagamento pelo site?</li><li value="24">O coletivo teria alguma participação ou responsabilidade sobre os serviços prestados pelas integrantes?</li></ol>
+<h3>Operação</h3>
+<ol><li value="25">Qual o <strong>orçamento</strong> mensal aceitável para hospedagem?</li><li value="26">Existe prazo ou data desejada para a Fase 1 (ex.: um aniversário do coletivo, um evento)?</li></ol></div></section>
+</main>
+<footer class="wrap">Gerado por <code>scripts/gerar_html_requisitos.py</code> a partir de <code>docs/requisitos/*.md</code>. Edite os .md e rode o script de novo.</footer>
+
+<script>
+(function () {
+  var IDS_RF = ["RF-00.1", "RF-00.2", "RF-00.3", "RF-00.4", "RF-00.5", "RF-00.6", "RF-01.1", "RF-01.2", "RF-01.3", "RF-01.4", "RF-01.5", "RF-01.6", "RF-01.7", "RF-02.1", "RF-02.2", "RF-02.3", "RF-02.4", "RF-03.1", "RF-03.2", "RF-03.3", "RF-04.1", "RF-04.2", "RF-04.3", "RF-04.4", "RF-04.5", "RF-04.6", "RF-04.7", "RF-05.1", "RF-05.2", "RF-05.3", "RF-05.4", "RF-05.5", "RF-06.1", "RF-06.2", "RF-06.3", "RF-06.4", "RF-07.1", "RF-07.2", "RF-07.3", "RF-07.4", "RF-07.5", "RF-07.6", "RF-07.7", "RF-07.8", "RF-07.9", "RF-07.10", "RF-07.11", "RF-08.1", "RF-08.2", "RF-08.3", "RF-09.1", "RF-09.2", "RF-09.3", "RF-10.1", "RF-10.2", "RF-10.3", "RF-10.4", "RF-10.5", "RF-10.6", "RF-10.7", "RF-10.8", "RF-10.9", "RF-10.10", "RF-10.11", "RF-10.12", "RF-10.13", "RF-10.14", "RF-10.15", "RF-10.16", "RF-00", "RF-01", "RF-02", "RF-03", "RF-04", "RF-05", "RF-06", "RF-07", "RF-08", "RF-09", "RF-10"];
+  var guardar = function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} };
+  var ler = function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } };
+
+  // Tema
+  var raiz = document.documentElement;
+  var temaSalvo = ler("req-tema");
+  if (temaSalvo) raiz.setAttribute("data-theme", temaSalvo);
+  document.getElementById("tema").addEventListener("click", function () {
+    var escuro = raiz.getAttribute("data-theme")
+      ? raiz.getAttribute("data-theme") === "dark"
+      : matchMedia("(prefers-color-scheme: dark)").matches;
+    var novo = escuro ? "light" : "dark";
+    raiz.setAttribute("data-theme", novo);
+    guardar("req-tema", novo);
+  });
+
+  // Abas
+  var abas = document.querySelectorAll("nav.abas button");
+  function abrir(nome) {
+    abas.forEach(function (b) { b.setAttribute("aria-selected", b.dataset.aba === nome); });
+    document.querySelectorAll(".painel").forEach(function (p) { p.classList.toggle("ativo", p.id === "aba-" + nome); });
+    guardar("req-aba", nome);
+  }
+  abas.forEach(function (b) { b.addEventListener("click", function () { abrir(b.dataset.aba); history.replaceState(null, "", "#" + b.dataset.aba); }); });
+  document.querySelectorAll("a[data-aba]").forEach(function (a) {
+    a.addEventListener("click", function (e) { e.preventDefault(); abrir(a.dataset.aba); scrollTo(0, 0); });
+  });
+
+  // Filtros dos requisitos funcionais
+  var ativos = { fase: new Set(), prio: new Set() };
+  var buscaRf = document.getElementById("busca-rf");
+  var moduloRf = document.getElementById("modulo-rf");
+  function contar(secoes) {
+    var visiveis = 0;
+    secoes.forEach(function (s) {
+      var linhas = s.querySelectorAll("tbody tr");
+      var n = s.querySelectorAll("tbody tr:not(.oculto)").length;
+      visiveis += n;
+      s.classList.toggle("vazio", n === 0);
+      s.querySelector(".conta").textContent = n === linhas.length ? "· " + n : "· " + n + " de " + linhas.length;
+    });
+    return visiveis;
+  }
+  function filtrarRf() {
+    var termo = buscaRf.value.trim().toLowerCase();
+    var mod = moduloRf.value;
+    var secoes = document.querySelectorAll("#aba-rf .modulo");
+    secoes.forEach(function (s) {
+      var foraModulo = mod && s.dataset.modulo !== mod;
+      s.querySelectorAll("tbody tr").forEach(function (tr) {
+        var ok = !foraModulo
+          && (!ativos.fase.size || ativos.fase.has(tr.dataset.fase))
+          && (!ativos.prio.size || ativos.prio.has(tr.dataset.prio))
+          && (!termo || tr.dataset.busca.indexOf(termo) !== -1);
+        tr.classList.toggle("oculto", !ok);
+      });
+    });
+    var n = contar(secoes);
+    document.getElementById("resultado-rf").textContent = n + " de " + IDS_RF.filter(function (i) { return i.indexOf(".") > 0; }).length + " requisitos";
+  }
+  document.querySelectorAll("#aba-rf .chip").forEach(function (c) {
+    c.setAttribute("aria-pressed", "false");
+    c.addEventListener("click", function () {
+      var conj = ativos[c.dataset.filtro];
+      if (conj.has(c.dataset.valor)) conj.delete(c.dataset.valor); else conj.add(c.dataset.valor);
+      c.setAttribute("aria-pressed", conj.has(c.dataset.valor));
+      filtrarRf();
+    });
+  });
+  buscaRf.addEventListener("input", filtrarRf);
+  moduloRf.addEventListener("change", filtrarRf);
+  function limparRf() {
+    ativos.fase.clear(); ativos.prio.clear(); buscaRf.value = ""; moduloRf.value = "";
+    document.querySelectorAll("#aba-rf .chip").forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
+    filtrarRf();
+  }
+  document.getElementById("limpar-rf").addEventListener("click", limparRf);
+  filtrarRf();
+
+  // Busca dos não funcionais
+  var buscaRnf = document.getElementById("busca-rnf");
+  buscaRnf.addEventListener("input", function () {
+    var termo = buscaRnf.value.trim().toLowerCase();
+    document.querySelectorAll("#aba-rnf tbody tr").forEach(function (tr) {
+      tr.classList.toggle("oculto", termo && tr.dataset.busca.indexOf(termo) === -1);
+    });
+    contar(document.querySelectorAll("#aba-rnf .modulo"));
+  });
+  contar(document.querySelectorAll("#aba-rnf .modulo"));
+
+  // Links para requisitos (RF-07.1, RNF-25, RF-10...) abrem a aba certa e destacam a linha
+  function irPara(id) {
+    var alvo = document.getElementById(id);
+    if (!alvo) return;
+    var painel = alvo.closest(".painel");
+    if (painel.id === "aba-rf") limparRf();
+    if (painel.id === "aba-rnf" && buscaRnf.value) { buscaRnf.value = ""; buscaRnf.dispatchEvent(new Event("input")); }
+    abrir(painel.id.replace("aba-", ""));
+    alvo.scrollIntoView({ block: "center" });
+    if (alvo.tagName === "TR") {
+      alvo.classList.add("destaque");
+      setTimeout(function () { alvo.classList.remove("destaque"); }, 1800);
+    }
+  }
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest("a.ref");
+    if (!a) return;
+    e.preventDefault();
+    irPara(a.dataset.ref);
+  });
+
+  // Aba inicial: hash da URL > última aba usada > funcionais
+  var hash = location.hash.slice(1);
+  if (document.getElementById("aba-" + hash)) abrir(hash);
+  else if (document.getElementById(hash)) irPara(hash);
+  else abrir(ler("req-aba") || "rf");
+})();
+</script>
+</body>
+</html>

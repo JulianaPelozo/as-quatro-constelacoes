@@ -105,7 +105,7 @@ Guias, modelos, listas de verificação e outros materiais.
 | RF-07.6 | Administradoras devem poder cadastrar e editar materiais gratuitos (incluindo upload de arquivo). | M | 2 |
 | RF-07.7 | Administradoras devem poder gerenciar categorias de cada seção. | S | 2 |
 | RF-07.8 | Cada integrante deve poder editar o próprio perfil. | S | 2 |
-| RF-07.9 | Perfis de acesso: **Administradora** (tudo) e **Autora** (apenas o próprio perfil, suas obras e seus conteúdos). | S | 3 |
+| RF-07.9 | Perfis de acesso: **Administradora** (tudo) e **Autora** (apenas o próprio perfil, suas obras e seus conteúdos). O perfil **Participante** do círculo de leitura está descrito em RF-10.1. | S | 3 |
 | RF-07.10 | Permitir agendar a publicação de um conteúdo para data/hora futura. | C | 3 |
 | RF-07.11 | Permitir recuperação de senha por e-mail. | S | 2 |
 
@@ -126,3 +126,30 @@ Criação de capas, revisão textual, identidade visual e outros serviços.
 | RF-09.1 | Disponibilizar formulário de contato geral do coletivo. | S | 3 |
 | RF-09.2 | Exibir os últimos posts do Instagram na página inicial. | C | 3 |
 | RF-09.3 | Permitir cadastro de e-mail para newsletter. | W | — |
+
+## RF-10 — Círculo de leitura *(nome provisório)*
+
+As participantes se comprometem a ler, em cada dia da semana, um capítulo definido no cronograma e a comentar nele um número mínimo de vezes no Wattpad. O site organiza o cronograma, recebe os registros das participantes e calcula automaticamente quem cumpriu as metas, para que as administradoras não precisem fazer essa conferência à mão.
+
+A leitura e os comentários continuam acontecendo **no Wattpad**. O site não verifica o Wattpad diretamente: cada participante **declara** o que fez, com evidência opcional (links dos comentários). As administradoras conferem por amostragem.
+
+| ID | Requisito | Prioridade | Fase |
+|----|-----------|:---:|:---:|
+| RF-10.1 | Participantes devem acessar uma área restrita com login e senha, com perfil de acesso **Participante** (vê apenas o próprio painel e o cronograma). | M | 2 |
+| RF-10.2 | Administradoras devem poder cadastrar, convidar e desativar participantes. Não há cadastro aberto. | M | 2 |
+| RF-10.3 | Administradoras devem poder cadastrar as histórias participantes do círculo (título, autora, link do Wattpad) e seus capítulos. Quando a história já existir na Vitrine (RF-04), o cadastro deve ser reaproveitado. | M | 2 |
+| RF-10.4 | Administradoras devem poder montar o **cronograma**: para cada dia, qual capítulo (história + capítulo + link) deve ser lido. | M | 2 |
+| RF-10.5 | Administradoras devem poder configurar as **metas**: número mínimo de comentários por capítulo *(valor a definir)* e quais dias da semana contam. | M | 2 |
+| RF-10.6 | A participante deve ver um painel com o capítulo do dia (com link direto para o Wattpad), suas pendências e o progresso da semana. | M | 2 |
+| RF-10.7 | A participante deve poder registrar que leu o capítulo do dia e quantos comentários fez nele. | M | 2 |
+| RF-10.8 | Ao registrar, a participante deve poder informar o(s) link(s) do(s) comentário(s) como evidência. As administradoras podem tornar isso obrigatório. | S | 2 |
+| RF-10.9 | O sistema deve calcular automaticamente se cada participante cumpriu a meta, por dia e por semana. | M | 2 |
+| RF-10.10 | Administradoras devem ver um painel com a situação de todas as participantes (*cumpriu*, *parcial*, *pendente*, *ausência justificada*), com filtro por período. | M | 2 |
+| RF-10.11 | Administradoras devem poder marcar registros como *conferidos* ou *contestados* (conferência por amostragem). | S | 2 |
+| RF-10.12 | Permitir registrar **ausências justificadas** (férias, imprevistos), que não contam como descumprimento da meta. | S | 2 |
+| RF-10.13 | A participante deve poder consultar o próprio histórico de participação. | S | 3 |
+| RF-10.14 | Gerar relatório semanal/mensal exportável (CSV) com o cumprimento das metas. | C | 3 |
+| RF-10.15 | Enviar lembretes por e-mail para participantes com pendências. | C | 3 |
+| RF-10.16 | Verificar automaticamente leituras e comentários direto no Wattpad. Só será considerado se houver um meio **oficial e permitido** pelos Termos de Serviço do Wattpad. | W | — |
+
+> **Nota de engenharia:** o sistema não deve acessar o Wattpad com as credenciais das participantes nem usar raspagem ou APIs não oficiais (ver RNF-27). Entidades principais: *Participante*, *História*, *Capítulo*, *Cronograma (dia → capítulo)*, *Meta*, *Registro* (participante, capítulo, data, nº de comentários, links, status de conferência) e *Ausência*.

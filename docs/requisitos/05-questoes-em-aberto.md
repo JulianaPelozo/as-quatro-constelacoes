@@ -23,15 +23,28 @@ Pontos que o pedido não deixa claros e que influenciam o desenvolvimento.
 
 ## Público e interação
 
-11. Leitoras/escritoras visitantes vão precisar **criar conta** em algum momento (ex.: salvar favoritos, comentar)? Hoje está fora do escopo.
+11. Leitoras/escritoras visitantes vão precisar **criar conta** em algum momento (ex.: salvar favoritos, comentar)? Hoje está fora do escopo. *(As contas do círculo de leitura são um caso à parte: ver seção abaixo.)*
 12. Há interesse em captar e-mails (newsletter) para avisar sobre novos conteúdos?
+
+## Círculo de leitura
+
+13. **Quem participa?** Só as integrantes do coletivo ou também outras escritoras do Wattpad? Quantas pessoas, aproximadamente? Como alguém entra ou sai do grupo?
+14. **Qual capítulo é lido em cada dia?** Existe rodízio entre as histórias das participantes? Todas leem o mesmo capítulo no mesmo dia? A participante lê a própria história?
+15. **Quem monta o cronograma** e com quanta antecedência?
+16. **Quantos comentários** por capítulo formam a meta? O que conta como comentário: só no fim do capítulo ou também nos parágrafos? Comentários muito curtos ("amei!") valem?
+17. **"Cada dia da semana"** inclui sábado e domingo? Há tolerância para atrasos, por exemplo registrar o capítulo de ontem hoje?
+18. **O que acontece quando alguém não cumpre a meta?** Só um aviso, alguma consequência, saída do grupo? Isso define que alertas e relatórios o sistema precisa ter.
+19. **Evidência:** o link do comentário deve ser obrigatório ou opcional? As administradoras querem conferir todos os registros ou por amostragem?
+20. **Privacidade:** as participantes veem o desempenho umas das outras (ex.: um ranking) ou só as administradoras? *(Afeta RNF-26.)*
+21. As regras de comunidade do Wattpad aceitam esse tipo de **troca combinada de comentários**? Vale conferir para não colocar as contas das participantes em risco.
+22. **Nome:** "Círculo de leitura" é provisório. Como o coletivo chama esse grupo?
 
 ## Serviços (ideia futura)
 
-13. Os serviços serão apenas **divulgados** (contato direto com a integrante) ou haveria orçamento/pagamento pelo site?
-14. O coletivo teria alguma participação ou responsabilidade sobre os serviços prestados pelas integrantes?
+23. Os serviços serão apenas **divulgados** (contato direto com a integrante) ou haveria orçamento/pagamento pelo site?
+24. O coletivo teria alguma participação ou responsabilidade sobre os serviços prestados pelas integrantes?
 
 ## Operação
 
-15. Qual o **orçamento** mensal aceitável para hospedagem?
-16. Existe prazo ou data desejada para a Fase 1 (ex.: um aniversário do coletivo, um evento)?
+25. Qual o **orçamento** mensal aceitável para hospedagem?
+26. Existe prazo ou data desejada para a Fase 1 (ex.: um aniversário do coletivo, um evento)?
