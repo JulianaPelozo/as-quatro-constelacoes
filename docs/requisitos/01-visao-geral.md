@@ -10,6 +10,7 @@ A **Constelação Literária** é um coletivo de escritoras que já atua nas red
 
 ## 3. Objetivos
 
+| # | Objetivo | Como saberemos que foi atingido |
 |---|----------|----------------------------------|
 | O1 | Centralizar os conteúdos educativos hoje espalhados nas redes | Conteúdos organizados por seção e categoria, fáceis de buscar |
 | O2 | Divulgar as obras das integrantes e ajudar novas histórias a encontrar leitores | Vitrine com sinopses e links para Wattpad / outras plataformas |
