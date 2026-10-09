@@ -38,6 +38,8 @@
 | RNF-25 | Participantes do círculo de leitura devem ser informadas, antes de começar, de quais dados de atividade são registrados, quem pode vê-los e por quanto tempo são guardados, e devem dar consentimento (LGPD). |
 | RNF-26 | Os dados de desempenho de cada participante devem ser visíveis apenas para ela e para as administradoras, salvo decisão diferente do coletivo (ver questões em aberto). |
 | RNF-27 | O site **nunca** deve pedir nem armazenar a senha do Wattpad das participantes, nem automatizar o acesso ao Wattpad em nome delas. |
+| RNF-28 | O banco de dados só pode ser acessado pelo back-end do site. Se o serviço de hospedagem do banco gerar uma API pública automática para as tabelas (ex.: a *Data API* do Supabase), ela deve ser **desativada**, ou **todas** as tabelas devem ter **RLS (Row Level Security)** ativado, sem políticas que liberem acesso anônimo. Isso vale para cada tabela nova, e deve ser conferido antes de cada publicação. |
+| RNF-29 | Credenciais (senha e endereço de conexão do banco, chaves de API, chaves de serviço) devem ficar apenas em variáveis de ambiente do servidor, **nunca** no repositório nem no código do front-end. |
 
 ## Visibilidade (SEO e compartilhamento)
 
