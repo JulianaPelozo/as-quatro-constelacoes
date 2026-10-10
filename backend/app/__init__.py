@@ -1,4 +1,9 @@
-from dotenv import load_dotenv
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    def load_dotenv():
+        pass
+
 from flask import Flask, jsonify
 
 from . import cli
@@ -14,7 +19,7 @@ def create_app(config=Config):
     db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
-    # "basic" em vez de "strong": a sessão não cai quando o celular troca de rede
+
     login_manager.session_protection = "basic"
 
     from . import models  # noqa: F401  (registra os modelos para as migrations)

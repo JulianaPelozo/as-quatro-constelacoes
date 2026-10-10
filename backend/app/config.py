@@ -1,6 +1,11 @@
 import os
 from datetime import timedelta
 
+from dotenv import load_dotenv
+
+# Carrega o backend/.env antes de ler as variáveis abaixo
+load_dotenv()
+
 
 def _url_do_banco():
     url = os.environ.get("DATABASE_URL")

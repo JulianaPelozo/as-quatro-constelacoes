@@ -60,10 +60,9 @@ São dois terminais: um para o back-end e outro para o front-end.
 ```bash
 cd backend
 python3 -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate     # sempre ative antes de usar o flask
 pip install -r requirements-dev.txt
 cp .env.example .env          # ajuste se quiser usar Postgres
-export FLASK_APP=app
 flask db upgrade              # cria/atualiza as tabelas
 flask criar-usuario           # cria sua conta de administradora (pede nome, e-mail e senha)
 flask run
