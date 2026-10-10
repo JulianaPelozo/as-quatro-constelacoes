@@ -4,8 +4,8 @@ Pontos que o pedido não deixa claros e que influenciam o desenvolvimento.
 
 ## Identidade e escopo
 
-1. **Nome do projeto:** o repositório se chama *as-quatro-constelacoes*, mas o texto do cliente fala em *Constelação Literária*. Qual é o nome oficial do site? O coletivo tem exatamente quatro integrantes?
-2. Já existe **logo, paleta de cores e tipografia** definidos nas redes sociais?
+1. **Nome do projeto:** ✅ *Respondido:* o nome oficial é **Constelação Literária**. Ainda em aberto: o coletivo tem exatamente quatro integrantes?
+2. Já existe **logo, paleta de cores e tipografia** definidos nas redes sociais? ✅ *Paleta respondida:* azul-escuro, roxo, dourado e preto, com versão clara e versão escura (ver RNF-06). Ainda em aberto: logo e tipografia oficiais (o site usa uma marca provisória de quatro estrelas e a fonte Cormorant Garamond nos títulos).
 3. Já existe um **domínio** (ex.: `constelacaoliteraria.com.br`)? Se não, quem vai registrar e pagar?
 
 ## Conteúdo

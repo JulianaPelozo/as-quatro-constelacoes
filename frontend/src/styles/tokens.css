@@ -1,0 +1,93 @@
+/*
+ * Paleta da Constelação Literária: azul-escuro, roxo, dourado e preto.
+ * Tema claro e tema escuro. Por padrão segue o sistema; o botão de tema
+ * grava a escolha em <html data-tema="claro|escuro">.
+ * Contrastes conferidos para WCAG AA (RNF-02).
+ */
+
+:root {
+  /* Cores da marca */
+  --marca-azul-escuro: #0f1533;
+  --marca-roxo: #4b2a8c;
+  --marca-dourado: #d4af37;
+  --marca-preto: #0a0d1c;
+
+  /* Tema claro (padrão) */
+  --fundo: #f6f3ec;
+  --fundo-brilho-1: rgba(75, 42, 140, 0.10);
+  --fundo-brilho-2: rgba(212, 175, 55, 0.14);
+  --estrelas: rgba(75, 42, 140, 0.20);
+  --superficie: #ffffff;
+  --superficie-borda: #e4dfd2;
+  --texto: #141a3a;
+  --texto-suave: #565b78;
+  --titulo-marca: #141a3a;
+  --destaque: #8a6a12;          /* dourado escuro: legível sobre branco */
+  --link: #5b34a8;
+  --botao-fundo: #4b2a8c;
+  --botao-fundo-hover: #3b2070;
+  --botao-texto: #ffffff;
+  --campo-fundo: #ffffff;
+  --campo-borda: #8b8fa8;
+  --foco: #4b2a8c;
+  --erro: #b3261e;
+  --erro-fundo: #fdecea;
+  --sombra: 0 1px 2px rgba(20, 26, 58, 0.06), 0 12px 32px rgba(20, 26, 58, 0.08);
+
+  --fonte-titulo: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --fonte-texto: system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, sans-serif;
+  --raio: 14px;
+
+  color-scheme: light;
+}
+
+/* Tema escuro: seguindo o sistema (se ninguém escolheu o claro) ou escolhido */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema='claro']) {
+    --fundo: #0a0d1c;
+    --fundo-brilho-1: rgba(91, 52, 168, 0.28);
+    --fundo-brilho-2: rgba(15, 21, 51, 0.9);
+    --estrelas: rgba(236, 233, 247, 0.55);
+    --superficie: #121731;
+    --superficie-borda: #262d55;
+    --texto: #ece9f7;
+    --texto-suave: #a9a5c6;
+    --titulo-marca: #d4af37;
+    --destaque: #d4af37;
+    --link: #b39dff;
+    --botao-fundo: #d4af37;
+    --botao-fundo-hover: #e3c25a;
+    --botao-texto: #14110a;
+    --campo-fundo: #0e1228;
+    --campo-borda: #666ea0;
+    --foco: #d4af37;
+    --erro: #ffa8a8;
+    --erro-fundo: rgba(255, 120, 120, 0.12);
+    --sombra: 0 12px 40px rgba(0, 0, 0, 0.45);
+    color-scheme: dark;
+  }
+}
+
+:root[data-tema='escuro'] {
+  --fundo: #0a0d1c;
+  --fundo-brilho-1: rgba(91, 52, 168, 0.28);
+  --fundo-brilho-2: rgba(15, 21, 51, 0.9);
+  --estrelas: rgba(236, 233, 247, 0.55);
+  --superficie: #121731;
+  --superficie-borda: #262d55;
+  --texto: #ece9f7;
+  --texto-suave: #a9a5c6;
+  --titulo-marca: #d4af37;
+  --destaque: #d4af37;
+  --link: #b39dff;
+  --botao-fundo: #d4af37;
+  --botao-fundo-hover: #e3c25a;
+  --botao-texto: #14110a;
+  --campo-fundo: #0e1228;
+  --campo-borda: #666ea0;
+  --foco: #d4af37;
+  --erro: #ffa8a8;
+  --erro-fundo: rgba(255, 120, 120, 0.12);
+  --sombra: 0 12px 40px rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
+}

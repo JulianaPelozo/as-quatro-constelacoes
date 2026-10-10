@@ -1,0 +1,59 @@
+.painel {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.painel__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--superficie);
+  border-bottom: 1px solid var(--superficie-borda);
+}
+
+.painel__marca {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--titulo-marca);
+}
+
+.painel__acoes {
+  display: flex;
+  gap: 8px;
+}
+
+.painel__sair {
+  min-height: 40px;
+  padding: 6px 16px;
+  border: 1px solid var(--campo-borda);
+  border-radius: 999px;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.painel__conteudo {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+.painel__conteudo h1 {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  font-size: 36px;
+}
+
+.painel__papel {
+  margin: 4px 0 24px;
+  color: var(--destaque);
+  font-weight: 600;
+}

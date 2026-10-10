@@ -44,11 +44,53 @@ Para navegar por todos os requisitos com filtros (fase, prioridade, módulo, bus
 
 ## Tecnologias
 
-*A definir.* Previsão inicial: **Python + Flask** no back-end e **React** no front-end. Esta seção será detalhada quando a arquitetura for decidida.
+| Parte | Tecnologia | Pasta |
+|-------|------------|-------|
+| Back-end (API) | Python 3.12, Flask, SQLAlchemy, Flask-Migrate, Flask-Login | [backend/](backend/) |
+| Front-end | React + Vite | [frontend/](frontend/) |
+| Banco de dados | PostgreSQL (Supabase em produção); SQLite no desenvolvimento, se nenhum banco for configurado | — |
+| Hospedagem prevista | Vercel (plano gratuito) | — |
 
 ## Como executar localmente
 
-*A definir quando o código for iniciado.*
+São dois terminais: um para o back-end e outro para o front-end.
+
+**1. Back-end** (Flask, em `http://127.0.0.1:5000`)
+
+```bash
+cd backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements-dev.txt
+cp .env.example .env          # ajuste se quiser usar Postgres
+export FLASK_APP=app
+flask db upgrade              # cria/atualiza as tabelas
+flask criar-usuario           # cria sua conta de administradora (pede nome, e-mail e senha)
+flask run
+```
+
+**2. Front-end** (React, em `http://localhost:5173`)
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Abra `http://localhost:5173`. O Vite repassa as chamadas `/api` para o Flask.
+
+**Testes do back-end:** `cd backend && .venv/bin/pytest`
+
+**Usar o Postgres local em vez do SQLite** (opcional):
+
+```bash
+sudo -u postgres createuser --pwprompt constelacao
+sudo -u postgres createdb -O constelacao constelacao
+# no backend/.env:
+# DATABASE_URL=postgresql://constelacao:SUA_SENHA@localhost:5432/constelacao
+```
+
+> ⚠️ **Toda tabela nova precisa de RLS** (RNF-28). Nas migrations, depois do `create_table`, adicione `op.execute('ALTER TABLE <tabela> ENABLE ROW LEVEL SECURITY')` dentro de um `if` para Postgres. O teste `tests/test_migrations.py` falha se você esquecer.
 
 ## Como contribuir
 

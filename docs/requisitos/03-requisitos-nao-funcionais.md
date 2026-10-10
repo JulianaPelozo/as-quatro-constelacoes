@@ -14,7 +14,7 @@
 
 | ID | Requisito |
 |----|-----------|
-| RNF-06 | O visual deve ser coerente com a identidade das redes sociais do coletivo (cores, logo, tipografia). |
+| RNF-06 | O visual deve ser coerente com a identidade das redes sociais do coletivo (cores, logo, tipografia). Paleta definida: **azul-escuro, roxo, dourado e preto**. O site deve ter **tema claro e tema escuro**: segue a preferência do sistema, e a pessoa pode trocar por um botão. Os valores das cores ficam em `frontend/src/styles/tokens.css`. |
 | RNF-07 | Deve existir um guia de estilo mínimo (paleta de cores, fontes, componentes) antes do desenvolvimento das telas. |
 
 ## Desempenho

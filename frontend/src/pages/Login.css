@@ -1,0 +1,212 @@
+.login {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  overflow: hidden;
+}
+
+/* Céu estrelado discreto atrás de tudo */
+.login__ceu {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 18%, var(--estrelas), transparent),
+    radial-gradient(1px 1px at 28% 62%, var(--estrelas), transparent),
+    radial-gradient(2px 2px at 44% 12%, var(--estrelas), transparent),
+    radial-gradient(1px 1px at 63% 78%, var(--estrelas), transparent),
+    radial-gradient(1.5px 1.5px at 78% 30%, var(--estrelas), transparent),
+    radial-gradient(1px 1px at 88% 66%, var(--estrelas), transparent),
+    radial-gradient(2px 2px at 92% 8%, var(--estrelas), transparent),
+    radial-gradient(1px 1px at 6% 86%, var(--estrelas), transparent),
+    radial-gradient(1.5px 1.5px at 52% 92%, var(--estrelas), transparent),
+    radial-gradient(1px 1px at 35% 38%, var(--estrelas), transparent);
+}
+
+.login__topo {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.login__conteudo {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 24px 0 48px;
+}
+
+.login__marca {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.login__nome {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  font-size: clamp(28px, 7vw, 36px);
+  letter-spacing: 0.01em;
+  color: var(--titulo-marca);
+  text-align: center;
+}
+
+.login__cartao {
+  width: 100%;
+  max-width: 400px;
+  padding: 28px 24px;
+  background: var(--superficie);
+  border: 1px solid var(--superficie-borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+}
+
+.login__titulo {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 1.1;
+}
+
+.login__subtitulo {
+  margin: 6px 0 20px;
+  color: var(--texto-suave);
+  font-size: 15px;
+}
+
+.login__alerta {
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  border-left: 3px solid var(--erro);
+  border-radius: 0 8px 8px 0;
+  background: var(--erro-fundo);
+  color: var(--erro);
+  font-size: 15px;
+}
+
+.campo {
+  margin-bottom: 16px;
+}
+
+.campo label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.campo input {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  background: var(--campo-fundo);
+  border: 1px solid var(--campo-borda);
+  border-radius: 10px;
+  font-size: 16px; /* 16px evita o zoom automático do iOS */
+}
+
+.campo input:focus-visible {
+  outline: none;
+  border-color: var(--foco);
+  box-shadow: 0 0 0 3px var(--foco);
+}
+
+.campo input[aria-invalid='true'] {
+  border-color: var(--erro);
+}
+
+.campo__erro {
+  margin: 6px 0 0;
+  color: var(--erro);
+  font-size: 14px;
+}
+
+.campo__senha {
+  position: relative;
+}
+
+.campo__senha input {
+  padding-right: 92px;
+}
+
+.campo__mostrar {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  min-height: 34px;
+  padding: 4px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--link);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.campo__mostrar:hover {
+  text-decoration: underline;
+}
+
+.login__lembrar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0 20px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.login__lembrar input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--botao-fundo);
+}
+
+.login__botao {
+  width: 100%;
+  min-height: 48px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--botao-fundo);
+  color: var(--botao-texto);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.login__botao:hover:not(:disabled) {
+  background: var(--botao-fundo-hover);
+}
+
+.login__botao:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.login__ajuda {
+  margin: 20px 0 0;
+  color: var(--texto-suave);
+  font-size: 14px;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login__botao {
+    transition: none;
+  }
+}
