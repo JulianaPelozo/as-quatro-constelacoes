@@ -13,8 +13,6 @@ bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 
 ERRO_CREDENCIAIS = "E-mail ou senha incorretos."
 
-# Hash de referência para quando o e-mail não existe: assim a resposta demora
-# o mesmo tempo e não revela quais e-mails estão cadastrados.
 _HASH_FALSO = None
 
 
@@ -31,9 +29,6 @@ def _erro(mensagem, status):
 
 @bp.post("/login")
 def login():
-    # get_json() recusa requisições que não sejam JSON (415). Formulários de
-    # outros sites não conseguem enviar JSON, o que protege contra CSRF
-    # junto com o cookie SameSite=Lax.
     dados = request.get_json() or {}
     email = Usuario.normalizar_email(dados.get("email"))
     senha = dados.get("senha") or ""

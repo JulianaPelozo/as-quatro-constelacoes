@@ -9,8 +9,6 @@ NOME_MAX = 120
 
 _EMAIL = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
 
-# Sem letras e números fáceis de confundir (l, 1, o, 0), porque a senha
-# temporária vai ser digitada pela participante a partir de uma mensagem.
 _ALFABETO_TEMPORARIA = "abcdefghjkmnpqrstuvwxyz23456789"
 
 

@@ -39,8 +39,6 @@ def _ler_numero(valor):
     return valor
 
 
-# ----------------------------------------------------------------- Histórias
-
 @bp.get("/contas-ativas")
 @somente_administradora
 def contas_ativas():
@@ -132,8 +130,6 @@ def editar_historia(id_):
 @bp.delete("/historias/<int:id_>")
 @somente_administradora
 def excluir_historia(id_):
-    # Quando existir o cronograma, uma história já usada nele não poderá
-    # ser excluída, só retirada do círculo.
     historia = _historia(id_)
     if historia is None:
         return _erro("História não encontrada.", 404)
@@ -141,8 +137,6 @@ def excluir_historia(id_):
     db.session.commit()
     return "", 204
 
-
-# ----------------------------------------------------------------- Capítulos
 
 @bp.post("/historias/<int:id_>/capitulos")
 @somente_administradora

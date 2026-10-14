@@ -14,7 +14,6 @@ RAIZ = Path(__file__).resolve().parent.parent
 PASTA = RAIZ / "docs" / "requisitos"
 SAIDA = RAIZ / "docs" / "requisitos.html"
 
-# arquivo .md -> id da aba no HTML
 ABAS = {
     "01-visao-geral.md": "visao",
     "02-requisitos-funcionais.md": "rf",
@@ -25,8 +24,6 @@ ABAS = {
 
 PRIORIDADES = {"M": "Must", "S": "Should", "C": "Could", "W": "Won't"}
 
-
-# ---------------------------------------------------------------- Markdown
 
 def inline(texto):
     """Converte a marcação inline (código, negrito, itálico, links, IDs)."""
@@ -49,9 +46,6 @@ def inline(texto):
     texto = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", link, texto)
     texto = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", texto)
     texto = re.sub(r"(?<![\w*])\*(?!\s)(.+?)(?<!\s)\*(?![\w*])", r"<em>\1</em>", texto)
-    # IDs de requisito viram links clicáveis
-    # IDs de requisito viram links clicáveis, inclusive a forma abreviada
-    # das listas ("RF-00.1, 00.3" ou "RNF-25 a 27")
     def ref(id_):
         return f'<a class="ref" href="#{id_}" data-ref="{id_}">{id_}</a>'
 
@@ -142,8 +136,6 @@ def sem_titulo(texto):
     return re.sub(r"^#\s+.*\n", "", texto, count=1)
 
 
-# ------------------------------------------------------ Requisitos funcionais
-
 def modulos_rf(texto):
     """Divide o 02 em módulos (## RF-XX), cada um com descrição, linhas e notas."""
     partes = re.split(r"^## ", texto, flags=re.M)
@@ -207,8 +199,6 @@ def html_rf(modulos):
     return "\n".join(blocos)
 
 
-# -------------------------------------------------- Requisitos não funcionais
-
 def html_rnf(texto):
     partes = re.split(r"^## ", sem_titulo(texto), flags=re.M)
     blocos = []
@@ -231,8 +221,6 @@ def html_rnf(texto):
 </section>""")
     return "\n".join(blocos)
 
-
-# ------------------------------------------------------------------- Página
 
 def resumo(modulos):
     reqs = [r for m in modulos for r in m["reqs"]]

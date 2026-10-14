@@ -8,9 +8,6 @@ from app.models import Papel, Usuario
 
 @pytest.fixture
 def app():
-    # O contexto da aplicação fica aberto só durante a preparação. Se ficasse
-    # aberto o teste todo, as requisições compartilhariam o mesmo `g` e a
-    # usuária logada vazaria de um cliente de teste para outro.
     app = create_app(ConfigTeste)
     with app.app_context():
         db.create_all()

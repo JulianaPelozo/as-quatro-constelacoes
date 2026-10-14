@@ -57,12 +57,10 @@ def test_bloqueia_apos_tentativas_erradas(app, client, criar_usuario, no_banco):
     for _ in range(app.config["LOGIN_MAX_TENTATIVAS"]):
         assert entrar(client, senha="errada").status_code == 401
 
-    # Bloqueada: nem a senha certa entra
     resposta = entrar(client)
     assert resposta.status_code == 429
     assert "15 minutos" in resposta.json["erro"]
 
-    # Passado o bloqueio, volta a entrar
     with no_banco():
         db.session.get(Usuario, id_).bloqueado_ate = agora() - timedelta(seconds=1)
         db.session.commit()

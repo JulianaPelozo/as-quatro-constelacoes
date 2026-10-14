@@ -32,8 +32,6 @@ def capitulo(client, historia_id, link="https://www.wattpad.com/1-cap", **extra)
     return client.post(f"{URL}/{historia_id}/capitulos", json={"link": link, **extra})
 
 
-# ------------------------------------------------------------- Permissões
-
 def test_rotas_exigem_administradora(client, criar_usuario, dani):
     assert client.get(URL).status_code == 401
     entrar(client, "dani@exemplo.com")
@@ -41,8 +39,6 @@ def test_rotas_exigem_administradora(client, criar_usuario, dani):
     assert criar_historia(client, dani).status_code == 403
     assert client.get("/api/admin/contas-ativas").status_code == 403
 
-
-# --------------------------------------------------------------- Histórias
 
 def test_cria_e_lista_historias(admin_logada, dani):
     resposta = criar_historia(admin_logada, dani, titulo="  Noites de Lua ")
@@ -82,7 +78,7 @@ def test_autora_precisa_estar_ativa(admin_logada, criar_usuario):
 def test_contas_ativas_para_escolher_autora(admin_logada, dani, criar_usuario):
     criar_usuario(email="fe@exemplo.com", papel=Papel.PARTICIPANTE, ativo=False)
     contas = admin_logada.get("/api/admin/contas-ativas").json["contas"]
-    assert {c["id"] for c in contas} == {1, dani}  # a administradora e Dani
+    assert {c["id"] for c in contas} == {1, dani}
 
 
 def test_edita_historia_e_tira_do_circulo(admin_logada, dani):
@@ -109,15 +105,12 @@ def test_excluir_historia_apaga_capitulos(admin_logada, dani, no_banco):
         assert db.session.scalar(db.select(db.func.count(Capitulo.id))) == 0
 
 
-# --------------------------------------------------------------- Capítulos
-
 def test_capitulos_numerados_em_sequencia(admin_logada, dani):
     id_ = criar_historia(admin_logada, dani).json["historia"]["id"]
     primeiro = capitulo(admin_logada, id_, titulo="O começo")
     assert primeiro.status_code == 201
     assert primeiro.json["capitulo"]["numero"] == 1
     assert capitulo(admin_logada, id_).json["capitulo"]["numero"] == 2
-    # Número escolhido à mão
     assert capitulo(admin_logada, id_, numero=10).json["capitulo"]["numero"] == 10
     assert capitulo(admin_logada, id_).json["capitulo"]["numero"] == 11
 
@@ -149,7 +142,6 @@ def test_edita_e_exclui_capitulo(admin_logada, dani):
 
     resposta = admin_logada.patch(f"/api/admin/capitulos/{cap1}", json={"numero": 2})
     assert resposta.status_code == 409
-    # Manter o próprio número não é conflito
     assert admin_logada.patch(f"/api/admin/capitulos/{cap1}", json={"numero": 5}).status_code == 200
 
     assert admin_logada.delete(f"/api/admin/capitulos/{cap1}").status_code == 204
@@ -193,8 +185,6 @@ def test_ler_linhas_de_capitulos():
     assert erros == []
     assert capitulos == [("Cap. 1", "https://a.com/1"), (None, "https://a.com/2"), ("Prólogo", "https://a.com/0")]
 
-
-# ------------------------------------------------------------------ Resumo
 
 def test_resumo_conta_historias_no_circulo(admin_logada, dani):
     a = criar_historia(admin_logada, dani).json["historia"]["id"]

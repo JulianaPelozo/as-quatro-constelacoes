@@ -50,8 +50,6 @@ def resumo():
     })
 
 
-# ------------------------------------------------------------ Participantes
-
 def _participante_ou_404(id_):
     usuario = db.session.get(Usuario, id_)
     if usuario is None or usuario.papel != Papel.PARTICIPANTE:

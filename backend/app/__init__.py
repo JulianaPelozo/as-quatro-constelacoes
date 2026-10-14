@@ -18,7 +18,7 @@ def create_app(config=Config):
 
     login_manager.session_protection = "basic"
 
-    from . import models  # noqa: F401  (registra os modelos para as migrations)
+    from . import models
     from .admin import bp as admin_bp
     from .auth import bp as auth_bp
     from .historias import bp as historias_bp
@@ -31,14 +31,12 @@ def create_app(config=Config):
     @login_manager.user_loader
     def carregar_usuario(id_):
         usuario = db.session.get(models.Usuario, int(id_))
-        # Conta desativada perde a sessão na hora, mesmo já logada
         return usuario if usuario and usuario.ativo else None
 
     @login_manager.unauthorized_handler
     def nao_autorizado():
         return jsonify({"erro": "Faça login para continuar."}), 401
 
-    # Enquanto a senha temporária não for trocada, só estas rotas funcionam
     rotas_liberadas = {"auth.eu", "auth.logout", "auth.trocar_senha", "auth.login", "saude"}
 
     @app.before_request
