@@ -2,6 +2,7 @@ import { useEffect, useId, useMemo, useState } from 'react'
 import { admin } from '../../api'
 import Confirmacao from '../../components/Confirmacao'
 import Dialogo from '../../components/Dialogo'
+import Esqueleto from '../../components/Esqueleto'
 import './AdminParticipantes.css'
 
 const FILTROS = [
@@ -94,7 +95,11 @@ export default function AdminParticipantes() {
         </button>
       </header>
 
-      <p className="pagina__aviso" role="status">{aviso}</p>
+      <p className="pagina__aviso" role="status">
+        <span key={aviso} className="aparecer">{aviso}</span>
+      </p>
+
+      {!participantes && !erroLista && <Esqueleto linhas={4} altura={76} />}
 
       {erroLista && <p className="alerta-erro" role="alert">{erroLista}</p>}
 
@@ -138,10 +143,14 @@ export default function AdminParticipantes() {
 
       {visiveis.length > 0 && (
         <ul className="lista-participantes">
-          {visiveis.map((p) => {
+          {visiveis.map((p, i) => {
             const s = situacao(p)
             return (
-              <li key={p.id} className={p.ativo ? 'participante' : 'participante participante--inativa'}>
+              <li
+                key={p.id}
+                className={`participante surgir${p.ativo ? '' : ' participante--inativa'}`}
+                style={{ '--i': i }}
+              >
                 <div className="participante__nome">
                   <strong>{p.nome}</strong>
                   <span>{p.email}</span>

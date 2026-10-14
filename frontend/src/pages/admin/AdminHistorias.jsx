@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router'
 import { admin } from '../../api'
 import Dialogo from '../../components/Dialogo'
+import Esqueleto from '../../components/Esqueleto'
 import FormHistoria from './FormHistoria'
 import './AdminHistorias.css'
 
@@ -58,7 +59,11 @@ export default function AdminHistorias() {
         </button>
       </header>
 
-      <p className="pagina__aviso" role="status">{local.state?.aviso}</p>
+      <p className="pagina__aviso" role="status">
+        {local.state?.aviso && <span className="aparecer">{local.state.aviso}</span>}
+      </p>
+
+      {!historias && !erro && <Esqueleto linhas={3} altura={118} colunas={260} />}
 
       {erro && <p className="alerta-erro" role="alert">{erro}</p>}
 
@@ -105,8 +110,8 @@ export default function AdminHistorias() {
 
       {visiveis.length > 0 && (
         <ul className="lista-historias">
-          {visiveis.map((h) => (
-            <li key={h.id}>
+          {visiveis.map((h, i) => (
+            <li key={h.id} className="surgir" style={{ '--i': i }}>
               <Link to={`/admin/historias/${h.id}`} className="cartao-historia">
                 <span className="cartao-historia__titulo">{h.titulo}</span>
                 <span className="cartao-historia__autora">por {h.autora.nome}</span>

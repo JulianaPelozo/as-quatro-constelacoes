@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate, useParams } from 'react-router'
 import { admin } from '../../api'
 import Confirmacao from '../../components/Confirmacao'
 import Dialogo from '../../components/Dialogo'
+import Esqueleto from '../../components/Esqueleto'
 import FormHistoria from './FormHistoria'
 import './AdminHistorias.css'
 
@@ -44,7 +45,16 @@ export default function AdminHistoria() {
       </div>
     )
   }
-  if (!historia) return null
+  if (!historia) {
+    return (
+      <div>
+        <Link to="/admin/historias" className="voltar">← Histórias</Link>
+        <Esqueleto linhas={1} altura={84} />
+        <div style={{ height: 24 }} />
+        <Esqueleto linhas={4} altura={62} />
+      </div>
+    )
+  }
 
   const n = historia.capitulos.length
 
@@ -74,7 +84,9 @@ export default function AdminHistoria() {
         </div>
       </header>
 
-      <p className="pagina__aviso" role="status">{aviso}</p>
+      <p className="pagina__aviso" role="status">
+        <span key={aviso} className="aparecer">{aviso}</span>
+      </p>
 
       <section className="secao-capitulos" aria-labelledby="titulo-capitulos">
         <div className="secao-capitulos__topo">
@@ -100,8 +112,8 @@ export default function AdminHistoria() {
           </div>
         ) : (
           <ol className="lista-capitulos">
-            {historia.capitulos.map((c) => (
-              <li key={c.id} className="capitulo">
+            {historia.capitulos.map((c, i) => (
+              <li key={c.id} className="capitulo surgir" style={{ '--i': i }}>
                 <span className="capitulo__numero" aria-label={`Capítulo ${c.numero}`}>{c.numero}</span>
                 <span className={c.titulo ? 'capitulo__titulo' : 'capitulo__titulo capitulo__titulo--vazio'}>
                   {c.titulo || 'Sem título'}

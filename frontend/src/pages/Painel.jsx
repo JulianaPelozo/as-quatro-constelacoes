@@ -16,7 +16,7 @@ export default function Painel() {
   return (
     <div className="painel">
       <Cabecalho />
-      <main className="painel__conteudo">
+      <main className="painel__conteudo surgir-pagina">
         <h1>Olá, {usuario.nome}!</h1>
         <p className="painel__papel">{NOME_PAPEL[usuario.papel] ?? usuario.papel}</p>
         <p>Seu painel está em construção. Em breve, aqui vão aparecer o capítulo do dia e suas metas.</p>

@@ -64,10 +64,10 @@ export default function AdminInicio() {
           <p className="inicio__erro" role="alert">{erro}</p>
         ) : (
           <dl className="numeros" aria-busy={!contas}>
-            <Numero rotulo="Participantes ativas" valor={contas?.participantes} destaque />
-            <Numero rotulo="Autoras" valor={contas?.autoras} />
-            <Numero rotulo="Administradoras" valor={contas?.administradoras} />
-            <Numero rotulo="Contas desativadas" valor={contas?.desativadas} />
+            <Numero i={0} rotulo="Participantes ativas" valor={contas?.participantes} destaque />
+            <Numero i={1} rotulo="Autoras" valor={contas?.autoras} />
+            <Numero i={2} rotulo="Administradoras" valor={contas?.administradoras} />
+            <Numero i={3} rotulo="Contas desativadas" valor={contas?.desativadas} />
           </dl>
         )}
       </section>
@@ -86,7 +86,11 @@ export default function AdminInicio() {
         <h2 id="titulo-passos">Primeiros passos</h2>
         <ol className="passos">
           {passos.map((passo, i) => (
-            <li key={passo.titulo} className={passo.feito ? 'passo passo--feito' : 'passo'}>
+            <li
+              key={passo.titulo}
+              className={`passo surgir${passo.feito ? ' passo--feito' : ''}`}
+              style={{ '--i': i + 4 }}
+            >
               <span className="passo__marcador" aria-hidden="true">
                 {passo.feito ? '✓' : i + 1}
               </span>
@@ -105,11 +109,17 @@ export default function AdminInicio() {
   )
 }
 
-function Numero({ rotulo, valor, destaque }) {
+function Numero({ i, rotulo, valor, destaque }) {
   return (
-    <div className={destaque ? 'numero numero--destaque' : 'numero'}>
+    <div className={`numero surgir${destaque ? ' numero--destaque' : ''}`} style={{ '--i': i }}>
       <dt>{rotulo}</dt>
-      <dd>{valor ?? '–'}</dd>
+      <dd>
+        {valor === undefined ? (
+          <span className="numero__carregando esqueleto__bloco" aria-hidden="true" />
+        ) : (
+          <span className="aparecer">{valor}</span>
+        )}
+      </dd>
     </div>
   )
 }

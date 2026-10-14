@@ -19,7 +19,6 @@
   border-radius: var(--raio);
   color: var(--texto);
   text-decoration: none;
-  transition: border-color 0.15s, transform 0.15s;
 }
 
 .cartao-historia:hover {
@@ -180,14 +179,4 @@
   line-height: 1.6;
   overflow-x: auto;
   white-space: pre;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cartao-historia {
-    transition: none;
-  }
-
-  .cartao-historia:hover {
-    transform: none;
-  }
 }

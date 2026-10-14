@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router'
+import { NavLink, Outlet, useLocation } from 'react-router'
 import Cabecalho from '../../components/Cabecalho'
 import './AdminLayout.css'
 
@@ -14,6 +14,7 @@ const SECOES = [
 ]
 
 export default function AdminLayout() {
+  const { pathname } = useLocation()
   return (
     <div className="admin">
       <Cabecalho />
@@ -37,7 +38,9 @@ export default function AdminLayout() {
           </ul>
         </nav>
         <main className="admin__conteudo">
-          <Outlet />
+          <div key={pathname} className="surgir-pagina">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>

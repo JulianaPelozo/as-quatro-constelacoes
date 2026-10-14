@@ -83,12 +83,12 @@ export default function TrocarSenha() {
       </div>
 
       <main className="acesso__conteudo">
-        <header className="acesso__marca">
+        <header className="acesso__marca surgir">
           <Logo tamanho={64} />
           <p className="acesso__nome">Constelação Literária</p>
         </header>
 
-        <section className="acesso__cartao" aria-labelledby={`${id}-titulo`}>
+        <section className="acesso__cartao surgir" style={{ '--i': 1 }} aria-labelledby={`${id}-titulo`}>
           <h1 id={`${id}-titulo`} className="acesso__titulo">
             {temporaria ? 'Crie sua senha' : 'Trocar senha'}
           </h1>

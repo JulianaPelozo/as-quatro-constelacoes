@@ -2,6 +2,7 @@
 @import '@fontsource/cormorant-garamond/latin-700.css';
 @import './styles/tokens.css';
 @import './styles/formulario.css';
+@import './styles/movimento.css';
 
 *,
 *::before,
