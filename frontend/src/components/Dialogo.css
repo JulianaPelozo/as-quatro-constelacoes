@@ -1,0 +1,99 @@
+.dialogo {
+  width: min(480px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 22px 22px 20px;
+  border: 1px solid var(--superficie-borda);
+  border-radius: var(--raio);
+  background: var(--superficie);
+  color: var(--texto);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+}
+
+.dialogo::backdrop {
+  background: rgba(10, 13, 28, 0.6);
+}
+
+.dialogo__topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.dialogo__topo h2 {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  font-size: 26px;
+  line-height: 1.15;
+}
+
+.dialogo__fechar {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--texto-suave);
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.dialogo__fechar:hover {
+  background: var(--fundo);
+  color: var(--texto);
+}
+
+.dialogo__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+/* Botões usados nos diálogos e nas páginas da área administrativa */
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 42px;
+  padding: 8px 18px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.botao:disabled {
+  opacity: 0.65;
+  cursor: progress;
+}
+
+.botao--principal {
+  background: var(--botao-fundo);
+  color: var(--botao-texto);
+}
+
+.botao--principal:hover:not(:disabled) {
+  background: var(--botao-fundo-hover);
+}
+
+.botao--secundario {
+  background: transparent;
+  border-color: var(--campo-borda);
+  color: var(--texto);
+}
+
+.botao--secundario:hover:not(:disabled) {
+  border-color: var(--texto);
+}
+
+.botao--perigo {
+  background: var(--erro);
+  color: var(--superficie);
+}

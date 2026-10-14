@@ -37,6 +37,11 @@ class Usuario(UserMixin, db.Model):
     bloqueado_ate = db.Column(db.DateTime)
     criado_em = db.Column(db.DateTime, nullable=False, default=agora)
     ultimo_login_em = db.Column(db.DateTime)
+    # Ligado quando a conta recebe uma senha temporária (criação ou
+    # redefinição pela administradora): a pessoa precisa trocá-la ao entrar.
+    precisa_trocar_senha = db.Column(
+        db.Boolean, nullable=False, default=False, server_default=db.false()
+    )
 
     @staticmethod
     def normalizar_email(email):
@@ -51,7 +56,7 @@ class Usuario(UserMixin, db.Model):
 
     @property
     def is_active(self):
-        # Usado pelo Flask-Login: conta desativada não mantém sessão
+        # Usado pelo Flask-Login no login_user()
         return self.ativo
 
     def para_json(self):
@@ -60,4 +65,20 @@ class Usuario(UserMixin, db.Model):
             "nome": self.nome,
             "email": self.email,
             "papel": self.papel.value,
+            "precisa_trocar_senha": self.precisa_trocar_senha,
         }
+
+    def para_json_admin(self):
+        """Dados que só administradoras veem."""
+        return {
+            **self.para_json(),
+            "ativo": self.ativo,
+            "bloqueado": bool(self.bloqueado_ate and self.bloqueado_ate > agora()),
+            "criado_em": _iso(self.criado_em),
+            "ultimo_login_em": _iso(self.ultimo_login_em),
+        }
+
+
+def _iso(data):
+    # Gravamos em UTC sem fuso; o "Z" avisa o navegador que é UTC
+    return data.isoformat(timespec="seconds") + "Z" if data else None

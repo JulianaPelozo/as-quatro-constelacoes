@@ -4,7 +4,7 @@ import { auth } from '../api'
 import { rotaInicial, useAuth } from '../auth'
 import Logo from '../components/Logo'
 import BotaoTema from '../components/BotaoTema'
-import './Login.css'
+import './Acesso.css'
 
 const EMAIL_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -55,25 +55,25 @@ export default function Login() {
   }
 
   return (
-    <div className="login">
-      <div className="login__ceu" aria-hidden="true" />
+    <div className="acesso">
+      <div className="acesso__ceu" aria-hidden="true" />
 
-      <div className="login__topo">
+      <div className="acesso__topo">
         <BotaoTema />
       </div>
 
-      <main className="login__conteudo">
-        <header className="login__marca">
+      <main className="acesso__conteudo">
+        <header className="acesso__marca">
           <Logo tamanho={64} />
-          <p className="login__nome">Constelação Literária</p>
+          <p className="acesso__nome">Constelação Literária</p>
         </header>
 
-        <section className="login__cartao" aria-labelledby={`${id}-titulo`}>
-          <h1 id={`${id}-titulo`} className="login__titulo">Entrar</h1>
-          <p className="login__subtitulo">Área das integrantes e participantes do círculo de leitura.</p>
+        <section className="acesso__cartao" aria-labelledby={`${id}-titulo`}>
+          <h1 id={`${id}-titulo`} className="acesso__titulo">Entrar</h1>
+          <p className="acesso__subtitulo">Área das integrantes e participantes do círculo de leitura.</p>
 
           {erroGeral && (
-            <div className="login__alerta" role="alert">
+            <div className="acesso__alerta" role="alert">
               {erroGeral}
             </div>
           )}
@@ -128,7 +128,7 @@ export default function Login() {
               )}
             </div>
 
-            <label className="login__lembrar">
+            <label className="acesso__lembrar">
               <input
                 type="checkbox"
                 checked={lembrar}
@@ -137,12 +137,12 @@ export default function Login() {
               Lembrar de mim neste aparelho
             </label>
 
-            <button type="submit" className="login__botao" disabled={enviando}>
+            <button type="submit" className="acesso__botao" disabled={enviando}>
               {enviando ? 'Entrando…' : 'Entrar'}
             </button>
           </form>
 
-          <p className="login__ajuda">
+          <p className="acesso__ajuda">
             Esqueceu a senha ou ainda não tem conta? Fale com uma administradora do coletivo.
           </p>
         </section>

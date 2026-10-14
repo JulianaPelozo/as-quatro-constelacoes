@@ -7,6 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from .extensions import db
 from .models import Usuario, agora
+from .validacao import erro_senha
 
 bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 
@@ -86,3 +87,25 @@ def logout():
 @login_required
 def eu():
     return jsonify({"usuario": current_user.para_json()})
+
+
+@bp.post("/trocar-senha")
+@login_required
+def trocar_senha():
+    dados = request.get_json() or {}
+    senha_atual = dados.get("senha_atual") or ""
+    nova = dados.get("nova_senha") or ""
+
+    if not current_user.confere_senha(senha_atual):
+        return _erro("A senha atual está incorreta.", 400)
+    erro = erro_senha(nova)
+    if erro:
+        return _erro(erro, 400)
+    if nova == senha_atual:
+        return _erro("A nova senha precisa ser diferente da atual.", 400)
+
+    current_user.definir_senha(nova)
+    current_user.precisa_trocar_senha = False
+    db.session.commit()
+    return jsonify({"usuario": current_user.para_json()})
+

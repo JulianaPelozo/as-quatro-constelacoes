@@ -6,7 +6,7 @@ import './AdminLayout.css'
 // desabilitadas, com "em breve", para mostrar o que vem por aí.
 const SECOES = [
   { titulo: 'Início', rota: '/admin' },
-  { titulo: 'Participantes' },
+  { titulo: 'Participantes', rota: '/admin/participantes' },
   { titulo: 'Histórias' },
   { titulo: 'Cronograma' },
   { titulo: 'Metas' },

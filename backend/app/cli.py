@@ -3,6 +3,7 @@ import click
 
 from .extensions import db
 from .models import Papel, Usuario
+from .validacao import erro_email, erro_nome, erro_senha
 
 
 def registrar(app):
@@ -19,8 +20,9 @@ def registrar(app):
     def criar_usuario(nome, email, papel, senha):
         """Cria uma conta. Não existe cadastro aberto no site (RF-10.2)."""
         email = Usuario.normalizar_email(email)
-        if len(senha) < 8:
-            raise click.ClickException("A senha precisa ter pelo menos 8 caracteres.")
+        erro = erro_nome(nome) or erro_email(email) or erro_senha(senha)
+        if erro:
+            raise click.ClickException(erro)
         if db.session.execute(db.select(Usuario).filter_by(email=email)).first():
             raise click.ClickException(f"Já existe uma conta com o e-mail {email}.")
 

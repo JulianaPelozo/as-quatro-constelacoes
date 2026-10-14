@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router'
 import { admin } from '../../api'
 import { useAuth } from '../../auth'
 import './AdminInicio.css'
@@ -39,8 +40,7 @@ export default function AdminInicio() {
     {
       titulo: 'Criar as contas das participantes',
       feito: contas ? contas.participantes > 0 : false,
-      detalhe:
-        'Por enquanto, pelo terminal: flask criar-usuario --papel participante. A tela de cadastro vem a seguir.',
+      detalhe: <Link to="/admin/participantes">Ir para Participantes</Link>,
     },
     { titulo: 'Cadastrar as histórias e os capítulos', detalhe: 'Em breve.' },
     { titulo: 'Montar o cronograma de leitura', detalhe: 'Em breve.' },

@@ -5,7 +5,9 @@ import ProvedorAuth from './components/ProvedorAuth'
 import AdminInicio from './pages/admin/AdminInicio'
 import AdminLayout from './pages/admin/AdminLayout'
 import Login from './pages/Login'
+import AdminParticipantes from './pages/admin/AdminParticipantes'
 import Painel from './pages/Painel'
+import TrocarSenha from './pages/TrocarSenha'
 
 function Inicio() {
   const { usuario } = useAuth()
@@ -33,12 +35,21 @@ export default function App() {
             }
           >
             <Route index element={<AdminInicio />} />
+            <Route path="participantes" element={<AdminParticipantes />} />
           </Route>
           <Route
             path="/painel"
             element={
               <Exigir>
                 <Painel />
+              </Exigir>
+            }
+          />
+          <Route
+            path="/trocar-senha"
+            element={
+              <Exigir telaDeTrocaDeSenha>
+                <TrocarSenha />
               </Exigir>
             }
           />

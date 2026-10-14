@@ -108,6 +108,7 @@ Guias, modelos, listas de verificação e outros materiais.
 | RF-07.9 | Perfis de acesso: **Administradora** (tudo) e **Autora** (apenas o próprio perfil, suas obras e seus conteúdos). O perfil **Participante** do círculo de leitura está descrito em RF-10.1. | S | 3 |
 | RF-07.10 | Permitir agendar a publicação de um conteúdo para data/hora futura. | C | 3 |
 | RF-07.11 | Permitir recuperação de senha por e-mail. | S | 2 |
+| RF-07.12 | Contas criadas pela administradora (ou com senha redefinida por ela) recebem uma **senha temporária**, exibida uma única vez, e a pessoa é obrigada a trocá-la no próximo acesso. Assim nenhuma administradora conhece a senha de outra pessoa. Enquanto não houver recuperação por e-mail (RF-07.11), esse é o caminho para "esqueci minha senha". | M | 2 |
 
 ## RF-08 — Serviços das integrantes *(ideia futura)*
 

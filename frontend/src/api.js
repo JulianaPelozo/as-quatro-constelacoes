@@ -34,8 +34,18 @@ export const auth = {
     chamar('/auth/login', { metodo: 'POST', corpo: { email, senha, lembrar } }),
   sair: () => chamar('/auth/logout', { metodo: 'POST' }),
   eu: () => chamar('/auth/eu'),
+  trocarSenha: (senhaAtual, novaSenha) =>
+    chamar('/auth/trocar-senha', {
+      metodo: 'POST',
+      corpo: { senha_atual: senhaAtual, nova_senha: novaSenha },
+    }),
 }
 
 export const admin = {
   resumo: () => chamar('/admin/resumo'),
+  participantes: () => chamar('/admin/participantes'),
+  criarParticipante: (dados) => chamar('/admin/participantes', { metodo: 'POST', corpo: dados }),
+  editarParticipante: (id, dados) =>
+    chamar(`/admin/participantes/${id}`, { metodo: 'PATCH', corpo: dados }),
+  redefinirSenha: (id) => chamar(`/admin/participantes/${id}/redefinir-senha`, { metodo: 'POST' }),
 }

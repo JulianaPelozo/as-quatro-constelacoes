@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from app.extensions import db
-from app.models import agora
+from app.models import Usuario, agora
 
 
 def entrar(client, email="carla@exemplo.com", senha="senha-segura-123", **extra):
@@ -52,8 +52,8 @@ def test_conta_desativada_nao_entra(client, criar_usuario):
     assert client.get("/api/auth/eu").status_code == 401
 
 
-def test_bloqueia_apos_tentativas_erradas(app, client, criar_usuario):
-    usuario = criar_usuario()
+def test_bloqueia_apos_tentativas_erradas(app, client, criar_usuario, no_banco):
+    id_ = criar_usuario()
     for _ in range(app.config["LOGIN_MAX_TENTATIVAS"]):
         assert entrar(client, senha="errada").status_code == 401
 
@@ -63,17 +63,19 @@ def test_bloqueia_apos_tentativas_erradas(app, client, criar_usuario):
     assert "15 minutos" in resposta.json["erro"]
 
     # Passado o bloqueio, volta a entrar
-    usuario.bloqueado_ate = agora() - timedelta(seconds=1)
-    db.session.commit()
+    with no_banco():
+        db.session.get(Usuario, id_).bloqueado_ate = agora() - timedelta(seconds=1)
+        db.session.commit()
     assert entrar(client).status_code == 200
 
 
-def test_login_correto_zera_tentativas(app, client, criar_usuario):
-    usuario = criar_usuario()
+def test_login_correto_zera_tentativas(app, client, criar_usuario, no_banco):
+    id_ = criar_usuario()
     for _ in range(app.config["LOGIN_MAX_TENTATIVAS"] - 1):
         entrar(client, senha="errada")
     assert entrar(client).status_code == 200
-    assert usuario.tentativas_falhas == 0
+    with no_banco():
+        assert db.session.get(Usuario, id_).tentativas_falhas == 0
 
 
 def test_logout_encerra_sessao(client, criar_usuario):

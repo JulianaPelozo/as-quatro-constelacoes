@@ -1,0 +1,72 @@
+/* Campos de formulário usados em todo o site */
+
+.campo {
+  margin-bottom: 16px;
+}
+
+.campo label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.campo input {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  background: var(--campo-fundo);
+  border: 1px solid var(--campo-borda);
+  border-radius: 10px;
+  font-size: 16px; /* 16px evita o zoom automático do iOS */
+}
+
+.campo input:focus-visible {
+  outline: none;
+  border-color: var(--foco);
+  box-shadow: 0 0 0 3px var(--foco);
+}
+
+.campo input[aria-invalid='true'] {
+  border-color: var(--erro);
+}
+
+.campo__erro {
+  margin: 6px 0 0;
+  color: var(--erro);
+  font-size: 14px;
+}
+
+.campo__senha {
+  position: relative;
+}
+
+.campo__senha input {
+  padding-right: 92px;
+}
+
+.campo__mostrar {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  min-height: 34px;
+  padding: 4px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--link);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.campo__mostrar:hover {
+  text-decoration: underline;
+}
+
+.campo__dica {
+  margin: 6px 0 0;
+  color: var(--texto-suave);
+  font-size: 14px;
+}

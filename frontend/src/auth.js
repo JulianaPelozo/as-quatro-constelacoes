@@ -9,5 +9,6 @@ export function useAuth() {
 
 /** Página inicial de cada perfil depois do login. */
 export function rotaInicial(usuario) {
+  if (usuario.precisa_trocar_senha) return '/trocar-senha'
   return usuario.papel === 'administradora' ? '/admin' : '/painel'
 }
