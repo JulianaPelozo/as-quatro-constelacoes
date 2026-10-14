@@ -35,7 +35,7 @@ export default function BotaoTema() {
   return (
     <button type="button" className="botao-tema" onClick={alternar}>
       <span aria-hidden="true">{tema === 'escuro' ? '☀' : '☾'}</span>
-      <span>Tema {proximo}</span>
+      <span className="botao-tema__texto">Tema {proximo}</span>
     </button>
   )
 }

@@ -22,3 +22,21 @@
   font-size: 16px;
   line-height: 1;
 }
+
+/* Celular: só o ícone (o texto continua para leitores de tela) */
+@media (max-width: 560px) {
+  .botao-tema {
+    width: 40px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .botao-tema__texto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+}

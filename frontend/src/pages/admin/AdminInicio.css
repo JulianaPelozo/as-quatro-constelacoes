@@ -1,0 +1,139 @@
+.inicio__topo {
+  margin-bottom: 28px;
+}
+
+.inicio__data {
+  margin: 0;
+  color: var(--destaque);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.inicio__topo h1 {
+  margin: 2px 0 0;
+  font-family: var(--fonte-titulo);
+  font-size: clamp(32px, 6vw, 42px);
+  line-height: 1.1;
+}
+
+.inicio__sub {
+  margin: 6px 0 0;
+  color: var(--texto-suave);
+}
+
+.inicio__secao {
+  margin-bottom: 32px;
+}
+
+.inicio__secao h2 {
+  margin: 0 0 12px;
+  font-family: var(--fonte-titulo);
+  font-size: 24px;
+}
+
+.inicio__erro {
+  padding: 10px 14px;
+  border-left: 3px solid var(--erro);
+  border-radius: 0 8px 8px 0;
+  background: var(--erro-fundo);
+  color: var(--erro);
+}
+
+/* Números */
+.numeros {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.numero {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 2px;
+  padding: 16px 18px;
+  background: var(--superficie);
+  border: 1px solid var(--superficie-borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+}
+
+.numero dt {
+  color: var(--texto-suave);
+  font-size: 14px;
+}
+
+.numero dd {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.numero--destaque {
+  border-top: 3px solid var(--destaque);
+}
+
+/* Estado vazio */
+.vazio {
+  padding: 20px;
+  border: 1px dashed var(--campo-borda);
+  border-radius: var(--raio);
+  color: var(--texto-suave);
+}
+
+.vazio p {
+  margin: 0;
+  max-width: 60ch;
+}
+
+/* Primeiros passos */
+.passos {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.passo {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  background: var(--superficie);
+  border: 1px solid var(--superficie-borda);
+  border-radius: var(--raio);
+}
+
+.passo__marcador {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 2px solid var(--campo-borda);
+  border-radius: 50%;
+  color: var(--texto-suave);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.passo--feito .passo__marcador {
+  background: var(--botao-fundo);
+  border-color: var(--botao-fundo);
+  color: var(--botao-texto);
+}
+
+.passo__titulo {
+  margin: 3px 0 0;
+  font-weight: 600;
+}
+
+.passo__detalhe {
+  margin: 2px 0 0;
+  color: var(--texto-suave);
+  font-size: 14px;
+}

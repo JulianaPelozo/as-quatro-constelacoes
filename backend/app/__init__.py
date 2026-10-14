@@ -1,9 +1,4 @@
-try:
-    from dotenv import load_dotenv
-except ImportError:
-    def load_dotenv():
-        pass
-
+from dotenv import load_dotenv
 from flask import Flask, jsonify
 
 from . import cli
@@ -23,9 +18,11 @@ def create_app(config=Config):
     login_manager.session_protection = "basic"
 
     from . import models  # noqa: F401  (registra os modelos para as migrations)
+    from .admin import bp as admin_bp
     from .auth import bp as auth_bp
 
     app.register_blueprint(auth_bp)
+    app.register_blueprint(admin_bp)
     cli.registrar(app)
 
     @login_manager.user_loader

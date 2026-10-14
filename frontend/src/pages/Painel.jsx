@@ -1,7 +1,5 @@
-import { useState } from 'react'
-import { auth } from '../api'
-import BotaoTema from '../components/BotaoTema'
-import Logo from '../components/Logo'
+import { useAuth } from '../auth'
+import Cabecalho from '../components/Cabecalho'
 import './Painel.css'
 
 const NOME_PAPEL = {
@@ -10,35 +8,14 @@ const NOME_PAPEL = {
   participante: 'Participante do círculo de leitura',
 }
 
-// Página provisória após o login. Será substituída pelo painel do círculo
-// de leitura (RF-10.6) e pela área administrativa (RF-10.10).
-export default function Painel({ usuario, aoSair }) {
-  const [saindo, setSaindo] = useState(false)
-
-  async function sair() {
-    setSaindo(true)
-    try {
-      await auth.sair()
-    } finally {
-      aoSair()
-    }
-  }
+// Página provisória das participantes e autoras. Será substituída pelo
+// painel do círculo de leitura (RF-10.6).
+export default function Painel() {
+  const { usuario } = useAuth()
 
   return (
     <div className="painel">
-      <header className="painel__topo">
-        <div className="painel__marca">
-          <Logo tamanho={36} />
-          <span>Constelação Literária</span>
-        </div>
-        <div className="painel__acoes">
-          <BotaoTema />
-          <button type="button" className="painel__sair" onClick={sair} disabled={saindo}>
-            {saindo ? 'Saindo…' : 'Sair'}
-          </button>
-        </div>
-      </header>
-
+      <Cabecalho />
       <main className="painel__conteudo">
         <h1>Olá, {usuario.nome}!</h1>
         <p className="painel__papel">{NOME_PAPEL[usuario.papel] ?? usuario.papel}</p>

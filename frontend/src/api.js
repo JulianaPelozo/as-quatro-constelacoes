@@ -35,3 +35,7 @@ export const auth = {
   sair: () => chamar('/auth/logout', { metodo: 'POST' }),
   eu: () => chamar('/auth/eu'),
 }
+
+export const admin = {
+  resumo: () => chamar('/admin/resumo'),
+}

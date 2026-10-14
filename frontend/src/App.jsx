@@ -1,20 +1,50 @@
-import { useEffect, useState } from 'react'
-import { auth } from './api'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
+import { rotaInicial, useAuth } from './auth'
+import Exigir from './components/Exigir'
+import ProvedorAuth from './components/ProvedorAuth'
+import AdminInicio from './pages/admin/AdminInicio'
+import AdminLayout from './pages/admin/AdminLayout'
 import Login from './pages/Login'
 import Painel from './pages/Painel'
 
+function Inicio() {
+  const { usuario } = useAuth()
+  return <Navigate to={usuario ? rotaInicial(usuario) : '/entrar'} replace />
+}
+
+function Entrar() {
+  const { usuario } = useAuth()
+  return usuario ? <Navigate to={rotaInicial(usuario)} replace /> : <Login />
+}
+
 export default function App() {
-  // undefined = ainda verificando; null = sem sessão
-  const [usuario, setUsuario] = useState(undefined)
-
-  useEffect(() => {
-    auth
-      .eu()
-      .then(({ usuario }) => setUsuario(usuario))
-      .catch(() => setUsuario(null))
-  }, [])
-
-  if (usuario === undefined) return null
-  if (!usuario) return <Login aoEntrar={setUsuario} />
-  return <Painel usuario={usuario} aoSair={() => setUsuario(null)} />
+  return (
+    <ProvedorAuth>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Inicio />} />
+          <Route path="/entrar" element={<Entrar />} />
+          <Route
+            path="/admin"
+            element={
+              <Exigir papel="administradora">
+                <AdminLayout />
+              </Exigir>
+            }
+          >
+            <Route index element={<AdminInicio />} />
+          </Route>
+          <Route
+            path="/painel"
+            element={
+              <Exigir>
+                <Painel />
+              </Exigir>
+            }
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </ProvedorAuth>
+  )
 }

@@ -1,5 +1,7 @@
 import { useId, useRef, useState } from 'react'
+import { useNavigate } from 'react-router'
 import { auth } from '../api'
+import { rotaInicial, useAuth } from '../auth'
 import Logo from '../components/Logo'
 import BotaoTema from '../components/BotaoTema'
 import './Login.css'
@@ -14,7 +16,9 @@ function validar(email, senha) {
   return erros
 }
 
-export default function Login({ aoEntrar }) {
+export default function Login() {
+  const { setUsuario } = useAuth()
+  const navegar = useNavigate()
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
   const [lembrar, setLembrar] = useState(false)
@@ -39,7 +43,8 @@ export default function Login({ aoEntrar }) {
     setEnviando(true)
     try {
       const { usuario } = await auth.entrar(email.trim(), senha, lembrar)
-      aoEntrar(usuario)
+      setUsuario(usuario)
+      navegar(rotaInicial(usuario), { replace: true })
     } catch (erro) {
       setErroGeral(erro.message)
       setSenha('')
