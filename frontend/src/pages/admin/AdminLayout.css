@@ -93,3 +93,162 @@ a.admin__link:hover {
     margin: 0;
   }
 }
+
+
+/* ---- Peças comuns das páginas da área administrativa ---- */
+
+.pagina__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 20px;
+}
+
+.pagina__topo h1 {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  font-size: clamp(32px, 6vw, 42px);
+  line-height: 1.1;
+}
+
+.pagina__sub {
+  margin: 4px 0 0;
+  color: var(--texto-suave);
+}
+
+.pagina__aviso {
+  min-height: 1.5em;
+  margin: 12px 0 8px;
+  color: var(--destaque);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.alerta-erro {
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  border-left: 3px solid var(--erro);
+  border-radius: 0 8px 8px 0;
+  background: var(--erro-fundo);
+  color: var(--erro);
+}
+
+/* Busca e filtros */
+.ferramentas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.busca {
+  flex: 1 1 240px;
+}
+
+.busca input {
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--campo-borda);
+  border-radius: 10px;
+  background: var(--campo-fundo);
+  font-size: 16px;
+}
+
+.busca input:focus-visible {
+  outline: none;
+  border-color: var(--foco);
+  box-shadow: 0 0 0 3px var(--foco);
+}
+
+.segmentado {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--superficie-borda);
+  border-radius: 12px;
+  background: var(--superficie);
+}
+
+.segmentado button {
+  min-height: 38px;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--texto-suave);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.segmentado button[aria-pressed='true'] {
+  background: var(--botao-fundo);
+  color: var(--botao-texto);
+}
+
+/* Etiquetas de situação */
+.etiqueta {
+  display: inline-block;
+  padding: 2px 10px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.etiqueta--ativa {
+  color: var(--destaque);
+}
+
+.etiqueta--pendente {
+  color: var(--link);
+}
+
+.etiqueta--alerta {
+  color: var(--erro);
+}
+
+.etiqueta--desativada {
+  color: var(--texto-suave);
+}
+
+/* Estado vazio */
+.vazio {
+  padding: 20px;
+  border: 1px dashed var(--campo-borda);
+  border-radius: var(--raio);
+  color: var(--texto-suave);
+}
+
+.vazio p {
+  margin: 0;
+}
+
+/* Botões discretos de ação nas listas */
+.acoes-linha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.acoes-linha button,
+.acoes-linha a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 4px 12px;
+  border: 1px solid var(--superficie-borda);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--link);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.acoes-linha button:hover,
+.acoes-linha a:hover {
+  border-color: var(--link);
+}

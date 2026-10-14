@@ -5,6 +5,8 @@ import ProvedorAuth from './components/ProvedorAuth'
 import AdminInicio from './pages/admin/AdminInicio'
 import AdminLayout from './pages/admin/AdminLayout'
 import Login from './pages/Login'
+import AdminHistoria from './pages/admin/AdminHistoria'
+import AdminHistorias from './pages/admin/AdminHistorias'
 import AdminParticipantes from './pages/admin/AdminParticipantes'
 import Painel from './pages/Painel'
 import TrocarSenha from './pages/TrocarSenha'
@@ -36,6 +38,8 @@ export default function App() {
           >
             <Route index element={<AdminInicio />} />
             <Route path="participantes" element={<AdminParticipantes />} />
+            <Route path="historias" element={<AdminHistorias />} />
+            <Route path="historias/:id" element={<AdminHistoria />} />
           </Route>
           <Route
             path="/painel"

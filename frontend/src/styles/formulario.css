@@ -70,3 +70,66 @@
   color: var(--texto-suave);
   font-size: 14px;
 }
+
+.campo select,
+.campo textarea {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--campo-fundo);
+  border: 1px solid var(--campo-borda);
+  border-radius: 10px;
+  font: inherit;
+  font-size: 16px;
+  color: inherit;
+}
+
+.campo select {
+  min-height: 46px;
+}
+
+.campo textarea {
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.campo select:focus-visible,
+.campo textarea:focus-visible {
+  outline: none;
+  border-color: var(--foco);
+  box-shadow: 0 0 0 3px var(--foco);
+}
+
+/* Caixa de seleção com explicação */
+.caixa {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 4px 0 8px;
+  cursor: pointer;
+}
+
+.caixa input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+  accent-color: var(--botao-fundo);
+}
+
+.caixa span {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.caixa small {
+  display: block;
+  margin-top: 2px;
+  color: var(--texto-suave);
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.campo__opcional {
+  color: var(--texto-suave);
+  font-weight: 400;
+}

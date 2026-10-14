@@ -21,9 +21,11 @@ def create_app(config=Config):
     from . import models  # noqa: F401  (registra os modelos para as migrations)
     from .admin import bp as admin_bp
     from .auth import bp as auth_bp
+    from .historias import bp as historias_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(historias_bp)
     cli.registrar(app)
 
     @login_manager.user_loader

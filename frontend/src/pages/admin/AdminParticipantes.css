@@ -1,95 +1,4 @@
-.participantes__topo {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 12px 20px;
-}
-
-.participantes__topo h1 {
-  margin: 0;
-  font-family: var(--fonte-titulo);
-  font-size: clamp(32px, 6vw, 42px);
-  line-height: 1.1;
-}
-
-.participantes__contagem {
-  margin: 4px 0 0;
-  color: var(--texto-suave);
-}
-
-.participantes__aviso {
-  min-height: 1.5em;
-  margin: 12px 0 8px;
-  color: var(--destaque);
-  font-weight: 600;
-  font-size: 15px;
-}
-
-.participantes__erro,
-.dialogo__erro {
-  margin: 0 0 14px;
-  padding: 10px 14px;
-  border-left: 3px solid var(--erro);
-  border-radius: 0 8px 8px 0;
-  background: var(--erro-fundo);
-  color: var(--erro);
-}
-
-/* Busca e filtros */
-.participantes__ferramentas {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-
-.participantes__busca {
-  flex: 1 1 240px;
-}
-
-.participantes__busca input {
-  width: 100%;
-  min-height: 44px;
-  padding: 8px 12px;
-  border: 1px solid var(--campo-borda);
-  border-radius: 10px;
-  background: var(--campo-fundo);
-  font-size: 16px;
-}
-
-.participantes__busca input:focus-visible {
-  outline: none;
-  border-color: var(--foco);
-  box-shadow: 0 0 0 3px var(--foco);
-}
-
-.participantes__filtros {
-  display: inline-flex;
-  padding: 3px;
-  border: 1px solid var(--superficie-borda);
-  border-radius: 12px;
-  background: var(--superficie);
-}
-
-.participantes__filtros button {
-  min-height: 38px;
-  padding: 6px 14px;
-  border: 0;
-  border-radius: 9px;
-  background: transparent;
-  color: var(--texto-suave);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.participantes__filtros button[aria-pressed='true'] {
-  background: var(--botao-fundo);
-  color: var(--botao-texto);
-}
-
-/* Lista */
+/* Lista de participantes */
 .lista-participantes {
   display: grid;
   gap: 10px;
@@ -141,28 +50,6 @@
   font-size: 13px;
 }
 
-.participante__acoes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.participante__acoes button {
-  min-height: 36px;
-  padding: 4px 12px;
-  border: 1px solid var(--superficie-borda);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--link);
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.participante__acoes button:hover {
-  border-color: var(--link);
-}
-
 @media (min-width: 900px) {
   .participante {
     grid-template-columns: minmax(200px, 1.4fr) minmax(180px, 1fr) auto;
@@ -174,60 +61,12 @@
     align-items: flex-start;
   }
 
-  .participante__acoes {
+  .participante .acoes-linha {
     justify-content: flex-end;
   }
 }
 
-/* Etiquetas de situação */
-.etiqueta {
-  display: inline-block;
-  padding: 2px 10px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 600;
-  border: 1px solid currentColor;
-}
-
-.etiqueta--ativa {
-  color: var(--destaque);
-}
-
-.etiqueta--pendente {
-  color: var(--link);
-}
-
-.etiqueta--alerta {
-  color: var(--erro);
-}
-
-.etiqueta--desativada {
-  color: var(--texto-suave);
-}
-
-/* Estado vazio (mesmo visual do início) */
-.participantes .vazio {
-  padding: 20px;
-  border: 1px dashed var(--campo-borda);
-  border-radius: var(--raio);
-  color: var(--texto-suave);
-}
-
-.participantes .vazio p {
-  margin: 0;
-}
-
-/* Diálogos desta página */
-.dialogo__texto {
-  margin: 0 0 4px;
-  color: var(--texto-suave);
-  line-height: 1.55;
-}
-
-.dialogo__texto strong {
-  color: var(--texto);
-}
-
+/* Diálogo da senha temporária */
 .senha-temporaria {
   display: flex;
   flex-wrap: wrap;
@@ -266,12 +105,4 @@
   font-size: 14px;
   line-height: 1.5;
   resize: vertical;
-}
-
-.dialogo__copiado {
-  min-height: 1.4em;
-  margin: 0;
-  color: var(--destaque);
-  font-size: 14px;
-  font-weight: 600;
 }

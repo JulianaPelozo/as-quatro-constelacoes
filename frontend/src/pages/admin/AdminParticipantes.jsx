@@ -1,5 +1,6 @@
 import { useEffect, useId, useMemo, useState } from 'react'
 import { admin } from '../../api'
+import Confirmacao from '../../components/Confirmacao'
 import Dialogo from '../../components/Dialogo'
 import './AdminParticipantes.css'
 
@@ -74,11 +75,11 @@ export default function AdminParticipantes() {
 
   return (
     <div className="participantes">
-      <header className="participantes__topo">
+      <header className="pagina__topo">
         <div>
           <h1>Participantes</h1>
           {participantes && (
-            <p className="participantes__contagem">
+            <p className="pagina__sub">
               {ativas} {ativas === 1 ? 'ativa' : 'ativas'}
               {desativadas > 0 && ` · ${desativadas} ${desativadas === 1 ? 'desativada' : 'desativadas'}`}
             </p>
@@ -93,13 +94,13 @@ export default function AdminParticipantes() {
         </button>
       </header>
 
-      <p className="participantes__aviso" role="status">{aviso}</p>
+      <p className="pagina__aviso" role="status">{aviso}</p>
 
-      {erroLista && <p className="participantes__erro" role="alert">{erroLista}</p>}
+      {erroLista && <p className="alerta-erro" role="alert">{erroLista}</p>}
 
       {participantes && participantes.length > 0 && (
-        <div className="participantes__ferramentas">
-          <label className="participantes__busca">
+        <div className="ferramentas">
+          <label className="busca">
             <span className="visualmente-oculto">Buscar por nome ou e-mail</span>
             <input
               type="search"
@@ -108,7 +109,7 @@ export default function AdminParticipantes() {
               onChange={(e) => setBusca(e.target.value)}
             />
           </label>
-          <div className="participantes__filtros" role="group" aria-label="Mostrar">
+          <div className="segmentado" role="group" aria-label="Mostrar">
             {FILTROS.map((f) => (
               <button
                 key={f.valor}
@@ -153,7 +154,7 @@ export default function AdminParticipantes() {
                       : 'Nunca entrou'}
                   </span>
                 </div>
-                <div className="participante__acoes">
+                <div className="participante__acoes acoes-linha">
                   <button type="button" onClick={() => setDialogo({ tipo: 'editar', participante: p })}>
                     Editar<span className="visualmente-oculto"> {p.nome}</span>
                   </button>
@@ -317,42 +318,6 @@ function FormParticipante({ participante, aoSalvar, aoCancelar }) {
         </button>
       </div>
     </form>
-  )
-}
-
-function Confirmacao({ texto, botao, perigo, aoConfirmar, aoCancelar }) {
-  const [enviando, setEnviando] = useState(false)
-  const [erro, setErro] = useState('')
-
-  async function confirmar() {
-    setEnviando(true)
-    setErro('')
-    try {
-      await aoConfirmar()
-    } catch (e) {
-      setErro(e.message)
-      setEnviando(false)
-    }
-  }
-
-  return (
-    <>
-      {erro && <p className="dialogo__erro" role="alert">{erro}</p>}
-      <p className="dialogo__texto">{texto}</p>
-      <div className="dialogo__acoes">
-        <button type="button" className="botao botao--secundario" onClick={aoCancelar} autoFocus>
-          Cancelar
-        </button>
-        <button
-          type="button"
-          className={perigo ? 'botao botao--perigo' : 'botao botao--principal'}
-          onClick={confirmar}
-          disabled={enviando}
-        >
-          {enviando ? 'Aguarde…' : botao}
-        </button>
-      </div>
-    </>
   )
 }
 

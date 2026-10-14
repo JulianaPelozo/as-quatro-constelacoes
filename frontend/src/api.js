@@ -17,15 +17,20 @@ async function chamar(caminho, { metodo = 'GET', corpo } = {}) {
   if (resposta.status === 204) return null
   const dados = await resposta.json().catch(() => ({}))
   if (!resposta.ok) {
-    throw new ErroApi(dados.erro || 'Algo deu errado. Tente de novo em instantes.', resposta.status)
+    throw new ErroApi(
+      dados.erro || 'Algo deu errado. Tente de novo em instantes.',
+      resposta.status,
+      dados.detalhes,
+    )
   }
   return dados
 }
 
 export class ErroApi extends Error {
-  constructor(mensagem, status) {
+  constructor(mensagem, status, detalhes = []) {
     super(mensagem)
     this.status = status
+    this.detalhes = detalhes
   }
 }
 
@@ -48,4 +53,18 @@ export const admin = {
   editarParticipante: (id, dados) =>
     chamar(`/admin/participantes/${id}`, { metodo: 'PATCH', corpo: dados }),
   redefinirSenha: (id) => chamar(`/admin/participantes/${id}/redefinir-senha`, { metodo: 'POST' }),
+  contasAtivas: () => chamar('/admin/contas-ativas'),
+
+  historias: () => chamar('/admin/historias'),
+  historia: (id) => chamar(`/admin/historias/${id}`),
+  criarHistoria: (dados) => chamar('/admin/historias', { metodo: 'POST', corpo: dados }),
+  editarHistoria: (id, dados) => chamar(`/admin/historias/${id}`, { metodo: 'PATCH', corpo: dados }),
+  excluirHistoria: (id) => chamar(`/admin/historias/${id}`, { metodo: 'DELETE' }),
+
+  criarCapitulo: (historiaId, dados) =>
+    chamar(`/admin/historias/${historiaId}/capitulos`, { metodo: 'POST', corpo: dados }),
+  criarCapitulosEmLote: (historiaId, texto) =>
+    chamar(`/admin/historias/${historiaId}/capitulos/lote`, { metodo: 'POST', corpo: { texto } }),
+  editarCapitulo: (id, dados) => chamar(`/admin/capitulos/${id}`, { metodo: 'PATCH', corpo: dados }),
+  excluirCapitulo: (id) => chamar(`/admin/capitulos/${id}`, { metodo: 'DELETE' }),
 }

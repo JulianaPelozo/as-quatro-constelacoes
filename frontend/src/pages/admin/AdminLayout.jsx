@@ -7,7 +7,7 @@ import './AdminLayout.css'
 const SECOES = [
   { titulo: 'Início', rota: '/admin' },
   { titulo: 'Participantes', rota: '/admin/participantes' },
-  { titulo: 'Histórias' },
+  { titulo: 'Histórias', rota: '/admin/historias' },
   { titulo: 'Cronograma' },
   { titulo: 'Metas' },
   { titulo: 'Conteúdos' },
@@ -23,7 +23,7 @@ export default function AdminLayout() {
             {SECOES.map((secao) => (
               <li key={secao.titulo}>
                 {secao.rota ? (
-                  <NavLink to={secao.rota} end className="admin__link">
+                  <NavLink to={secao.rota} end={secao.rota === '/admin'} className="admin__link">
                     {secao.titulo}
                   </NavLink>
                 ) : (

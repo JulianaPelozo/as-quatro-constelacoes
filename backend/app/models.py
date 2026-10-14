@@ -82,3 +82,70 @@ class Usuario(UserMixin, db.Model):
 def _iso(data):
     # Gravamos em UTC sem fuso; o "Z" avisa o navegador que é UTC
     return data.isoformat(timespec="seconds") + "Z" if data else None
+
+
+class Historia(db.Model):
+    """História que participa do círculo de leitura (RF-10.3).
+
+    Os campos da Vitrine (capa, sinopse, gêneros...) entram aqui na Fase 2b
+    (RF-04), reaproveitando o mesmo cadastro.
+    """
+
+    __tablename__ = "historias"
+
+    id = db.Column(db.Integer, primary_key=True)
+    titulo = db.Column(db.String(200), nullable=False)
+    autora_id = db.Column(db.Integer, db.ForeignKey("usuarios.id"), nullable=False, index=True)
+    link = db.Column(db.String(500), nullable=False)
+    # Fora do círculo: o cadastro fica, mas a história não entra no cronograma
+    no_circulo = db.Column(db.Boolean, nullable=False, default=True, server_default=db.true())
+    criada_em = db.Column(db.DateTime, nullable=False, default=agora)
+
+    autora = db.relationship("Usuario")
+    capitulos = db.relationship(
+        "Capitulo",
+        back_populates="historia",
+        order_by="Capitulo.numero",
+        cascade="all, delete-orphan",
+    )
+
+    def para_json(self, com_capitulos=False):
+        dados = {
+            "id": self.id,
+            "titulo": self.titulo,
+            "autora": {"id": self.autora.id, "nome": self.autora.nome},
+            "link": self.link,
+            "no_circulo": self.no_circulo,
+            "total_capitulos": len(self.capitulos),
+            "criada_em": _iso(self.criada_em),
+        }
+        if com_capitulos:
+            dados["capitulos"] = [c.para_json() for c in self.capitulos]
+        return dados
+
+
+class Capitulo(db.Model):
+    __tablename__ = "capitulos"
+    __table_args__ = (
+        db.UniqueConstraint("historia_id", "numero", name="uq_capitulos_historia_numero"),
+    )
+
+    id = db.Column(db.Integer, primary_key=True)
+    historia_id = db.Column(
+        db.Integer, db.ForeignKey("historias.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    numero = db.Column(db.Integer, nullable=False)
+    titulo = db.Column(db.String(200))
+    link = db.Column(db.String(500), nullable=False)
+    criado_em = db.Column(db.DateTime, nullable=False, default=agora)
+
+    historia = db.relationship("Historia", back_populates="capitulos")
+
+    def para_json(self):
+        return {
+            "id": self.id,
+            "historia_id": self.historia_id,
+            "numero": self.numero,
+            "titulo": self.titulo,
+            "link": self.link,
+        }

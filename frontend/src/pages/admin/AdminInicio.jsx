@@ -34,15 +34,18 @@ export default function AdminInicio() {
 
   const contas = resumo?.contas
 
-  // Roteiro para colocar o círculo de leitura de pé (RF-10). Só o primeiro
-  // passo já pode ser conferido com dados reais.
+  // Roteiro para colocar o círculo de leitura de pé (RF-10)
   const passos = [
     {
       titulo: 'Criar as contas das participantes',
       feito: contas ? contas.participantes > 0 : false,
       detalhe: <Link to="/admin/participantes">Ir para Participantes</Link>,
     },
-    { titulo: 'Cadastrar as histórias e os capítulos', detalhe: 'Em breve.' },
+    {
+      titulo: 'Cadastrar as histórias e os capítulos',
+      feito: resumo ? resumo.circulo.capitulos > 0 : false,
+      detalhe: <Link to="/admin/historias">Ir para Histórias</Link>,
+    },
     { titulo: 'Montar o cronograma de leitura', detalhe: 'Em breve.' },
     { titulo: 'Definir as metas de comentários', detalhe: 'Em breve.' },
   ]

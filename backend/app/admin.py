@@ -2,7 +2,7 @@
 from flask import Blueprint, abort, jsonify, request
 
 from .extensions import db
-from .models import Papel, Usuario
+from .models import Capitulo, Historia, Papel, Usuario
 from .permissoes import somente_administradora
 from .validacao import erro_email, erro_nome, gerar_senha_temporaria
 
@@ -36,6 +36,16 @@ def resumo():
             "autoras": ativas[Papel.AUTORA.value],
             "participantes": ativas[Papel.PARTICIPANTE.value],
             "desativadas": inativas,
+        },
+        "circulo": {
+            "historias": db.session.scalar(
+                db.select(db.func.count(Historia.id)).filter_by(no_circulo=True)
+            ),
+            "capitulos": db.session.scalar(
+                db.select(db.func.count(Capitulo.id))
+                .join(Historia)
+                .filter(Historia.no_circulo.is_(True))
+            ),
         },
     })
 

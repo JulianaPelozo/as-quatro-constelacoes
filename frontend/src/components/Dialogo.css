@@ -97,3 +97,35 @@
   background: var(--erro);
   color: var(--superficie);
 }
+
+.dialogo__texto {
+  margin: 0 0 4px;
+  color: var(--texto-suave);
+  line-height: 1.55;
+}
+
+.dialogo__texto strong {
+  color: var(--texto);
+}
+
+.dialogo__erro {
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  border-left: 3px solid var(--erro);
+  border-radius: 0 8px 8px 0;
+  background: var(--erro-fundo);
+  color: var(--erro);
+}
+
+.dialogo__erro ul {
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+
+.dialogo__copiado {
+  min-height: 1.4em;
+  margin: 0;
+  color: var(--destaque);
+  font-size: 14px;
+  font-weight: 600;
+}
